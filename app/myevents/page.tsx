@@ -1,29 +1,39 @@
-import MyEvents from "./myevents";
+"use client"; // This line is necessary to let Next.js know it should be treated as a client-side component
+
+import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 
-// Main Events page component as default export
-export default function Events() {
-  return <MyEvents />;
-}
+type EventData = {
+  description: string;
+  // Add other event properties here as needed
+};
 
-// EventPage component as a named export
-export function EventPage({ params }: { params: { event: string } }) {
-  const { event } = params;  // Here, you can access the event string
+const MyEventPage = () => {
+  const [eventData, setEventData] = useState<EventData | null>(null);
+  const router = useRouter();
+  const { event } = router.query; // Grab the event parameter from the URL
 
-  // You can now use this event in your component, for example, rendering it:
+  useEffect(() => {
+    if (event) {
+      // Fetch the event details using the event parameter
+      fetch(`/api/events/${event}`) // Assuming you have an API route like this
+        .then((response) => response.json())
+        .then((data) => setEventData(data))
+        .catch((error) => console.error("Error fetching event data:", error));
+    }
+  }, [event]);
+
+  if (!eventData) {
+    return <p>Loading event data...</p>;
+  }
+
   return (
     <div>
       <h1>Event: {event}</h1>
+      <p>{eventData.description}</p>
+      {/* Display other event details here */}
     </div>
   );
-}
+};
 
-// If you're using getServerSideProps or getStaticProps:
-export async function getServerSideProps(context: any) {
-  const { event } = context.params;  // Destructure event from params
-  
-  // If you are fetching data based on the event or performing other logic, do it here
-  return {
-    props: { params: { event } },  // Pass the event as props to the page
-  };
-}
+export default MyEventPage;
