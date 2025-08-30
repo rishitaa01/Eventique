@@ -1,30 +1,39 @@
-'use client';  // Marks this as a Client Component
+// app/stats/[event]/page.tsx
+'use client';  // Mark this as a Client Component
 
 import { useEffect, useState } from 'react';
 
-const EventPage = () => {
-  const [event, setEvent] = useState<string | null>(null); // Store event data
-  const [loading, setLoading] = useState(true); // Loading state
-  const [error, setError] = useState<string | null>(null); // Error state
+// Define the correct type for the `params`
+type PageProps = {
+  params: {
+    event: string;  // or whatever the expected param is
+  };
+};
+
+const EventPage = ({ params }: PageProps) => {
+  const [event, setEvent] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchEventData = async () => {
       try {
-        const res = await fetch('/api/event'); // API endpoint
+        // Use the dynamic `event` from params
+        const res = await fetch(`/api/event/${params.event}`);
         if (!res.ok) {
           throw new Error('Failed to fetch event data');
         }
         const data = await res.json();
-        setEvent(data.event);  // Assuming 'event' is the key holding the event data
+        setEvent(data.event);  // Assuming the API returns an event field
       } catch (err) {
         setError('Error fetching event data');
       } finally {
-        setLoading(false);  // Stop loading
+        setLoading(false);
       }
     };
 
     fetchEventData();
-  }, []); // Empty dependency array ensures it only runs on mount
+  }, [params.event]);  // Depend on the event param
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>{error}</p>;
@@ -32,7 +41,7 @@ const EventPage = () => {
   return (
     <div>
       <h1>Event: {event}</h1>
-      {/* Render more event details */}
+      {/* Render other event details */}
     </div>
   );
 };
