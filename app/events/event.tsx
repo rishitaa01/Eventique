@@ -9,6 +9,10 @@ interface Event {
   agenda: string;
   url: string;
 }
+const EventListing = () => {
+  const router = useRouter();  // Declare useRouter inside the component
+
+  const [events, setEvents] = useState<Event[]>([]);
 
 const EventListing = () => {
   const [events, setEvents] = useState<Event[]>([]);
@@ -70,4 +74,4 @@ const EventListing = () => {
 function useState<T>(arg0: never[]): [any, any] {
   throw new Error("Function not implemented.");
 }
-  
+}
