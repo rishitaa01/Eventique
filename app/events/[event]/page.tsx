@@ -1,4 +1,3 @@
-// ...existing code...
 import { getEventData } from './yourDataFetchingLogic';
 import EventPageClient from './EventPageClient';
 
@@ -10,13 +9,11 @@ export async function generateStaticParams() {
   ];
 }
 
-type EventPageProps = {
-  params: {
-    event: string;
-  };
-};
-
-export default async function EventPage({ params }: EventPageProps) {
+export default async function EventPage({
+  params,
+}: {
+  params: { event: string };
+}) {
   const eventData = await getEventData(params.event);
 
   const eventWithDetails = {
@@ -28,6 +25,6 @@ export default async function EventPage({ params }: EventPageProps) {
     <div>
       <h1>{eventWithDetails.name}</h1>
       <EventPageClient event={eventWithDetails} />
-        </div>
-      );
-    }
+    </div>
+  );
+}
