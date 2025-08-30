@@ -1,5 +1,5 @@
 import { useRouter } from 'next/navigation';
-import router from 'next/router';
+const router = useRouter();
 import { Key, ReactElement, JSXElementConstructor, ReactNode, ReactPortal } from "react";
 
 interface Event {
