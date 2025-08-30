@@ -1,30 +1,31 @@
 // app/myevents/page.tsx
 "use client";
-import { useRouter } from 'next/router';
+// In the app/myevents/page.tsx file
 
-type PageProps = {
-  event: string;
-};
+// In the app/myevents/page.tsx file
 
-const MyEventPage = ({ event }: PageProps) => {
-  // You can directly use event now
+import { useEffect, useState } from "react";
+
+const MyEventPage = () => {
+  const [event, setEvent] = useState<string | null>(null);
+
+  useEffect(() => {
+    // Fetch the event dynamically
+    const fetchEventData = async () => {
+      const res = await fetch("/api/event");  // Example: fetch your event data from an API route
+      const data = await res.json();
+      setEvent(data.event);  // Assuming the response contains the event
+    };
+
+    fetchEventData();
+  }, []);
+
   return (
     <div>
       <h1>Event: {event}</h1>
-      {/* Add other components or UI here */}
+      {/* Render your event data here */}
     </div>
   );
 };
-
-// If you're using getServerSideProps or getStaticProps
-export async function getServerSideProps(context: any) {
-  const { event } = context.params; // Extract event from params
-
-  // Fetch event data here if necessary
-
-  return {
-    props: { event },
-  };
-}
 
 export default MyEventPage;
