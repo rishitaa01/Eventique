@@ -7,7 +7,7 @@ class MyDocument extends Document {
         <Head>
           <link rel="icon" href="/favicon.ico" />
           {/* You can add a PNG or SVG favicon too */}
-          <link rel="icon" type="image/png" href="/logo/logo.png" />
+          <link rel="icon" type="image/png" href="/logo/logo-png.png" />
         </Head>
         <body>
           <Main />

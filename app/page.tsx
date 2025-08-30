@@ -23,7 +23,10 @@ export default function Home() {
         >
           <div className="flex lg:flex-1">
             {/* ✅ Use /logo/... instead of importing */}
-            <img src="/logo/logo-transparent-svg.svg" alt="Eventique Logo" />
+            import Image from 'next/image';
+
+              <Image src="/logo/logo-png.png" alt="Eventique Logo" width={150} height={150} />
+
 
           </div>
           <div className="flex lg:hidden">
