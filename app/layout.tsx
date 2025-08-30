@@ -4,7 +4,10 @@ import { Inter } from 'next/font/google';
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata = {
-  title: 'EventAlly - Create Events',
+  title: 'Eventique - Create Events',
+  icons: {
+    icon: "logo-png.png",
+  },
   description:
     'Eventique is a platform for event organizers to create and manage events.',
 };
