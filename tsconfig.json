@@ -1,9 +1,9 @@
 {
   "compilerOptions": {
-    "jsx": "react-jsx", 
-    "types": ["react"],
-    "target": "es5",
+    "types": ["react", "react-dom"],
     "lib": ["dom", "dom.iterable", "esnext"],
+    "jsx": "react-jsx", 
+    "target": "es5",
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
