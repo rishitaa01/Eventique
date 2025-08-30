@@ -1,33 +1,38 @@
-"use client";
+'use client';
+
 import { useRouter } from 'next/navigation';
-const router = useRouter();
-import { Key, ReactElement, JSXElementConstructor, ReactNode, ReactPortal } from "react";
+import { useEffect, useState } from 'react'; // Correctly import React hooks
+import { Key } from "react";
 
 interface Event {
   $id: string;
   eventname: string;
   agenda: string;
   url: string;
+  created: any;
 }
-const EventListing = () => {
-  const router = useRouter();  // Declare useRouter inside the component
-
-  const [events, setEvents] = useState<Event[]>([]);
 
 const EventListing = () => {
-  const [events, setEvents] = useState<Event[]>([]);
+  const router = useRouter(); // Declared useRouter inside the component
+  const [events, setEvents] = useState<Event[]>([]); // Correct usage of useState for typing events
 
-  function deleteEvent($id: any): void {
-    throw new Error("Function not implemented.");
-  }
+  // Fetch your events and update the state
+  useEffect(() => {
+    // Fetching logic should be placed here (API call or fetching data)
+    // Example: setEvents(fetchedData);
+  }, []);
 
-  // Your existing code for fetching events...
-  
+  const deleteEvent = (eventId: string) => {
+    // Your delete event logic goes here
+    console.log("Deleting event with ID:", eventId);
+    // Example: Call to API to delete event
+  };
+
   return (
     <div>
       <p className="text-3xl font-bold mb-2 text-center mx-auto py-5">All Active Events</p>
       <div className="py-10">
-        {events.map((item: { $id: Key | null | undefined; url: string | Blob | undefined; eventname: string | number | bigint | boolean | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | ReactPortal | Promise<string | number | bigint | boolean | ReactPortal | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | null | undefined> | null | undefined; agenda: string | number | bigint | boolean | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | ReactPortal | Promise<string | number | bigint | boolean | ReactPortal | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | null | undefined> | null | undefined; created: any; }) => (
+        {events.map((item) => (
           <div key={item.$id} className="py-2">
             <section className="text-gray-600 body-font">
               <div className="container mx-auto flex px-5 py-24 md:flex-row flex-col items-center">
@@ -46,16 +51,15 @@ const EventListing = () => {
                   <div className="flex justify-center">
                     <button
                       className="inline-flex text-white bg-[#f02e65] border-0 py-2 px-6 focus:outline-none hover:bg-[#b51349] rounded text-lg"
-                      onClick={() => router.push(`/events/${item.$id}`)}
+                      onClick={() => router.push(`/events/${item.$id}`)} // Use router.push to navigate
                     >
                       Register
                     </button>
 
-                    {JSON.parse(localStorage.getItem("userInfo") || "{}").$id ===
-                    item.created ? (
+                    {JSON.parse(localStorage.getItem("userInfo") || "{}").$id === item.created ? (
                       <button
                         className="ml-4 inline-flex text-gray-700 bg-gray-100 border-0 py-2 px-6 focus:outline-none hover:bg-gray-200 rounded text-lg"
-                        onClick={() => deleteEvent(item.$id)}
+                        onClick={() => deleteEvent(item.$id)} // Call deleteEvent function
                       >
                         Delete Event
                       </button>
@@ -71,7 +75,4 @@ const EventListing = () => {
   );
 };
 
-function useState<T>(arg0: never[]): [any, any] {
-  throw new Error("Function not implemented.");
-}
-}
+export default EventListing;
