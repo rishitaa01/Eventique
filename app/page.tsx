@@ -1,7 +1,6 @@
 "use client";
 import { useState } from "react";
 import Image from "next/image";
-import Icon from "../public/logo/logo-transparent-svg.svg";
 import { useRouter } from "next/navigation";
 
 const navigation = [
@@ -23,7 +22,13 @@ export default function Home() {
           aria-label="Global"
         >
           <div className="flex lg:flex-1">
-            <Image src={Icon} height={200} width={200} alt="Product Logo" />
+            {/* ✅ Use /logo/... instead of importing */}
+            <Image
+              src="/logo/logo-transparent-svg.svg"
+              height={200}
+              width={200}
+              alt="Product Logo"
+            />
           </div>
           <div className="flex lg:hidden">
             <button
