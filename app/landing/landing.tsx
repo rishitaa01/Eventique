@@ -13,7 +13,7 @@ export default function Body() {
             Experience hassle free event
           </h1>
           <p className="lg:w-2/3 mx-auto leading-relaxed text-base">
-            Welcome to our innovative event management application Event-Ally,
+            Welcome to our innovative event management application Eventique,
             where organizing and executing unforgettable events becomes
             effortless. Streamline your planning process and create
             extraordinary experiences with our intuitive platform.
