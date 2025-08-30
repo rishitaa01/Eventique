@@ -1,57 +1,51 @@
-'use client';
+// app/stats/[event]/page.tsx
 
-import React, { useEffect, useState } from 'react';
-import { useSearchParams, useRouter } from 'next/navigation';
+'use client';  // Make sure it's a client component
 
-export default function EventPage() {
-  const searchParams = useSearchParams();
-  const router = useRouter();
+import { useEffect, useState } from 'react';
 
-  const id = searchParams?.get('id');
-  const slug = searchParams?.get('slug');
-
-  type EventType = {
-    title: string;
-    description: string;
-    // Add more fields as needed
+// Define the type for the PageProps
+type PageProps = {
+  params: {
+    event: string;  // Assuming 'event' is a dynamic part of your URL
   };
+};
 
-  const [event, setEvent] = useState<EventType | null>(null);
+const EventPage = ({ params }: PageProps) => {
+  const [event, setEvent] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
+  const [error, setError] = useState<string | null>(null);
 
+  // Fetch event data when the page is rendered
   useEffect(() => {
-    if (!id || !slug) {
-      setError('Missing event ID or slug');
-      setLoading(false);
-      return;
-    }
-
-    const fetchEvent = async () => {
+    const fetchEventData = async () => {
       try {
-        const res = await fetch(`/api/events?id=${id}&slug=${slug}`);
-        if (!res.ok) throw new Error('Failed to fetch event');
+        // Make an API call or fetch event data
+        const res = await fetch(`/api/event/${params.event}`);
+        if (!res.ok) {
+          throw new Error('Failed to fetch event data');
+        }
         const data = await res.json();
-        setEvent(data);
-      } catch (err: any) {
-        setError(err.message);
+        setEvent(data.event);  // Assuming the response has an 'event' field
+      } catch (err) {
+        setError('Error fetching event data');
       } finally {
         setLoading(false);
       }
     };
 
-    fetchEvent();
-  }, [id, slug]);
+    fetchEventData();
+  }, [params.event]);  // Re-run when the 'event' parameter changes
 
-  if (loading) return <p>Loading event...</p>;
-  if (error) return <p>Error: {error}</p>;
-  if (!event) return <p>No event found.</p>;
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>{error}</p>;
 
   return (
     <div>
-      <h1>{event.title}</h1>
-      <p>{event.description}</p>
-      {/* Add more event details here */}
+      <h1>Event: {event}</h1>
+      {/* Render additional event details here */}
     </div>
   );
-}
+};
+
+export default EventPage;
