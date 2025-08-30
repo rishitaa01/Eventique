@@ -1,51 +1,52 @@
-// app/stats/[event]/page.tsx
+'use client'
 
-'use client';  // Make sure it's a client component
+import { useEffect, useState } from "react";
+import { useRouter } from "next/router";
+import React from 'react';
 
-import { useEffect, useState } from 'react';
-
-// Define the type for the PageProps
-type PageProps = {
+interface EventProps {
   params: {
-    event: string;  // Assuming 'event' is a dynamic part of your URL
+    event: string;
   };
-};
+}
 
-const EventPage = ({ params }: PageProps) => {
-  const [event, setEvent] = useState<string | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+interface EventData {
+  name: string;
+  description: string;
+  // Add other fields as needed
+}
 
-  // Fetch event data when the page is rendered
+const EventPage: React.FC<EventProps> = ({ params }) => {
+  const [eventData, setEventData] = useState<EventData | null>(null);
+
   useEffect(() => {
-    const fetchEventData = async () => {
-      try {
-        // Make an API call or fetch event data
-        const res = await fetch(`/api/event/${params.event}`);
-        if (!res.ok) {
-          throw new Error('Failed to fetch event data');
-        }
-        const data = await res.json();
-        setEvent(data.event);  // Assuming the response has an 'event' field
-      } catch (err) {
-        setError('Error fetching event data');
-      } finally {
-        setLoading(false);
-      }
-    };
+    // Use the event param from URL
+    const eventId = params.event;
 
-    fetchEventData();
-  }, [params.event]);  // Re-run when the 'event' parameter changes
+    // Make an API call or perform any other logic here
+    fetch(`/api/events/${eventId}`)
+      .then((response) => response.json())
+      .then((data) => setEventData(data))
+      .catch((error) => console.error('Error fetching event:', error));
+  }, [params.event]);
 
-  if (loading) return <p>Loading...</p>;
-  if (error) return <p>{error}</p>;
+  if (!eventData) return <div>Loading...</div>;
 
   return (
     <div>
-      <h1>Event: {event}</h1>
-      {/* Render additional event details here */}
+      <h1>Event: {eventData.name}</h1>
+      <p>{eventData.description}</p>
     </div>
   );
 };
+
+// Use Next.js dynamic routes for params in the app directory
+export async function generateStaticParams() {
+  // You can fetch your dynamic routes here and return them
+  return [
+    { event: 'event1' }, // Example dynamic param
+    { event: 'event2' }, // Example dynamic param
+  ];
+}
 
 export default EventPage;
