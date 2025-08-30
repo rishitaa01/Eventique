@@ -3,10 +3,7 @@ import EventPageClient from './EventPageClient';
 
 // Static Generation for Dynamic Paths
 export async function generateStaticParams() {
-  return [
-    { event: 'event1' },
-    { event: 'event2' }
-  ];
+  return [{ event: 'event1' }, { event: 'event2' }];
 }
 
 export default async function EventPage({

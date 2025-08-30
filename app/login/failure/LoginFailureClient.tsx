@@ -1,11 +1,11 @@
-"use client";
+'use client';
 
-import { useEffect } from "react";
+import { useEffect } from 'react';
 
 export default function LoginFailureClient() {
   useEffect(() => {
     // safe to use document/localStorage here
-    console.log("Mounted in browser");
+    console.log('Mounted in browser');
   }, []);
 
   return (

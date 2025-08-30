@@ -1,15 +1,19 @@
 export async function getEventData(event: string) {
   // Replace this with your actual data fetching logic
-  const mockEvents: Record<string, {
-    details: string; name: string 
-}> = {
+  const mockEvents: Record<
+    string,
+    {
+      details: string;
+      name: string;
+    }
+  > = {
     event1: {
       name: 'Event One',
-      details: ""
+      details: '',
     },
     event2: {
       name: 'Event Two',
-      details: ""
+      details: '',
     },
   };
   return mockEvents[event] || { name: 'Unknown Event' };

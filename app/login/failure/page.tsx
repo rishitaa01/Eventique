@@ -1,7 +1,7 @@
-"use client";
-import dynamic from "next/dynamic";
+'use client';
+import dynamic from 'next/dynamic';
 
-const LoginFailureClient = dynamic(() => import("./LoginFailureClient"), {
+const LoginFailureClient = dynamic(() => import('./LoginFailureClient'), {
   ssr: false, // 🚀 disables server-side rendering
 });
 

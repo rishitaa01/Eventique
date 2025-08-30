@@ -1,7 +1,7 @@
-"use client";
-import dynamic from "next/dynamic";
+'use client';
+import dynamic from 'next/dynamic';
 
-const LoginSuccessClient = dynamic(() => import("./LoginSuccessClient"), {
+const LoginSuccessClient = dynamic(() => import('./LoginSuccessClient'), {
   ssr: false,
 });
 

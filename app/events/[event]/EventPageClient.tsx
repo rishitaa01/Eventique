@@ -25,4 +25,3 @@ function EventPageClient({ event }: EventPageClientProps) {
 }
 
 export default EventPageClient;
-

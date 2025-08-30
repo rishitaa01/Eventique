@@ -1,10 +1,10 @@
 // app/myevents/page.tsx
-"use client";
+'use client';
 // In the app/myevents/page.tsx file
 
 // In the app/myevents/page.tsx file
 
-import { useEffect, useState } from "react";
+import { useEffect, useState } from 'react';
 
 const MyEventPage = () => {
   const [event, setEvent] = useState<string | null>(null);
@@ -12,9 +12,9 @@ const MyEventPage = () => {
   useEffect(() => {
     // Fetch the event dynamically
     const fetchEventData = async () => {
-      const res = await fetch("/api/event");  // Example: fetch your event data from an API route
+      const res = await fetch('/api/event'); // Example: fetch your event data from an API route
       const data = await res.json();
-      setEvent(data.event);  // Assuming the response contains the event
+      setEvent(data.event); // Assuming the response contains the event
     };
 
     fetchEventData();
