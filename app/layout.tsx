@@ -6,7 +6,7 @@ const inter = Inter({ subsets: ['latin'] });
 export const metadata = {
   title: 'Eventique - Create Events',
   icons: {
-    icon: "logo-png.png",
+    icon: "favicon.ico",
   },
   description:
     'Eventique is a platform for event organizers to create and manage events.',
