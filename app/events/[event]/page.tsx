@@ -1,49 +1,57 @@
-// app/stats/[event]/page.tsx
-'use client';  // Mark this as a Client Component
+'use client';
 
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useSearchParams, useRouter } from 'next/navigation';
 
-// Define the correct type for the `params`
-type PageProps = {
-  params: {
-    event: string;  // or whatever the expected param is
+export default function EventPage() {
+  const searchParams = useSearchParams();
+  const router = useRouter();
+
+  const id = searchParams?.get('id');
+  const slug = searchParams?.get('slug');
+
+  type EventType = {
+    title: string;
+    description: string;
+    // Add more fields as needed
   };
-};
 
-const EventPage = ({ params }: PageProps) => {
-  const [event, setEvent] = useState<string | null>(null);
+  const [event, setEvent] = useState<EventType | null>(null);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState('');
 
   useEffect(() => {
-    const fetchEventData = async () => {
+    if (!id || !slug) {
+      setError('Missing event ID or slug');
+      setLoading(false);
+      return;
+    }
+
+    const fetchEvent = async () => {
       try {
-        // Use the dynamic `event` from params
-        const res = await fetch(`/api/event/${params.event}`);
-        if (!res.ok) {
-          throw new Error('Failed to fetch event data');
-        }
+        const res = await fetch(`/api/events?id=${id}&slug=${slug}`);
+        if (!res.ok) throw new Error('Failed to fetch event');
         const data = await res.json();
-        setEvent(data.event);  // Assuming the API returns an event field
-      } catch (err) {
-        setError('Error fetching event data');
+        setEvent(data);
+      } catch (err: any) {
+        setError(err.message);
       } finally {
         setLoading(false);
       }
     };
 
-    fetchEventData();
-  }, [params.event]);  // Depend on the event param
+    fetchEvent();
+  }, [id, slug]);
 
-  if (loading) return <p>Loading...</p>;
-  if (error) return <p>{error}</p>;
+  if (loading) return <p>Loading event...</p>;
+  if (error) return <p>Error: {error}</p>;
+  if (!event) return <p>No event found.</p>;
 
   return (
     <div>
-      <h1>Event: {event}</h1>
-      {/* Render other event details */}
+      <h1>{event.title}</h1>
+      <p>{event.description}</p>
+      {/* Add more event details here */}
     </div>
   );
-};
-
-export default EventPage;
+}
