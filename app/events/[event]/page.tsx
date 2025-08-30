@@ -84,3 +84,33 @@ export default function Home() {
     </div>
   );
 }
+// File: pages/event.tsx
+
+// import React, { useState } from 'react'; // Removed duplicate import
+
+const EventPage = () => {
+  const [fileData, setFileData] = useState(null);
+
+  // Function that triggers the API call
+  const handleFetchData = async () => {
+    const response = await fetch('/api/upload', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ filePath: 'path/to/your/file.txt' }),
+    });
+
+    const result = await response.json();
+    setFileData(result.data);  // Handle response
+  };
+
+  return (
+    <div>
+      <button onClick={handleFetchData}>Get File Data</button>
+      {fileData && <pre>{fileData}</pre>}  {/* Display file data */}
+    </div>
+  );
+};
+
+// export default EventPage;
