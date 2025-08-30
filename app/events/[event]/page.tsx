@@ -1,23 +1,33 @@
-// This page handles server-side logic and static generation
-import { getEventData } from './yourDataFetchingLogic'; // Import your data fetching logic
-import EventPageClient from './EventPageClient';// Import the client-side component
+// ...existing code...
+import { getEventData } from './yourDataFetchingLogic';
+import EventPageClient from './EventPageClient';
 
 // Static Generation for Dynamic Paths
 export async function generateStaticParams() {
   return [
-    { event: 'event1' }, // Example dynamic param
-    { event: 'event2' }  // Example dynamic param
+    { event: 'event1' },
+    { event: 'event2' }
   ];
 }
 
-export default async function EventPage({ params }: { params: { event: string } }) {
-  const eventData = await getEventData(params.event); // Fetch data on the server
+type EventPageProps = {
+  params: {
+    event: string;
+  };
+};
+
+export default async function EventPage({ params }: EventPageProps) {
+  const eventData = await getEventData(params.event);
+
+  const eventWithDetails = {
+    ...eventData,
+    details: eventData.details ?? '',
+  };
 
   return (
     <div>
-      <h1>{eventData.name}</h1>
-      {/* Pass data to client-side component */}
-      <EventPageClient event={eventData} />
-    </div>
-  );
-}
+      <h1>{eventWithDetails.name}</h1>
+      <EventPageClient event={eventWithDetails} />
+        </div>
+      );
+    }
