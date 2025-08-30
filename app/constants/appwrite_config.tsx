@@ -1,8 +1,7 @@
 "use client";
 
-import { Client, Account, Models, ID, Databases, Storage } from "appwrite";
+import { Client, Account, Models, ID, Databases, Storage, Permission, Role } from "appwrite";
 import { User } from "./interface";
-import sdk, { Permission, Role } from "node-appwrite";
 
 interface Sponsors {
   id: number;
@@ -10,58 +9,37 @@ interface Sponsors {
   url: string;
 }
 class ServerConfig {
-  client: sdk.Client = new sdk.Client();
+  client: Client = new Client();
   regDb: string = `${process.env.NEXT_PUBLIC_REGDB}`;
   sponDb: string = `${process.env.NEXT_PUBLIC_SPODB}`;
-  databases: sdk.Databases = new sdk.Databases(this.client);
+  databases: Databases = new Databases(this.client);
 
   constructor() {
     this.client
       .setEndpoint(`${process.env.NEXT_PUBLIC_ENDPOINT}`)
-      .setProject(`${process.env.NEXT_PUBLIC_PROJECTID}`)
-      .setKey(`${process.env.NEXT_PUBLIC_DBKEY}`);
+      .setProject(`${process.env.NEXT_PUBLIC_PROJECTID}`);
+      // .setKey(`${process.env.NEXT_PUBLIC_DBKEY}`); // Remove or comment out if not needed
   }
 
+  // The Appwrite JS SDK does not support creating collections via the client SDK.
+  // Collections should be created via the Appwrite Console or Server SDK.
+  // This function can be removed or replaced with a comment.
   createRegColl(id: string, name: string) {
-    this.databases
-      .createCollection(this.regDb, id, name, [
-        Permission.read(Role.any()), // Anyone can view this document
-        Permission.update(Role.any()), // Writers can update this document
-        Permission.create(Role.any()), // Admins can update this document
-        Permission.delete(Role.any()), // Admins can delete this document
-      ])
-      .then((res) => {
-        this.databases.createStringAttribute(this.regDb, id, "name", 50, false);
-        this.databases.createStringAttribute(this.regDb, id, "email", 50, false);
-        this.databases.createStringAttribute(this.regDb, id, "confirm", 50, false, "");
-        
-      });
+    console.warn("createRegColl is not supported via the Appwrite JS SDK. Please create collections using the Appwrite Console.");
   }
 
-  createSponColl(id: string, name: string, sponsor: Sponsors[], user:string) {
-    this.databases
-      .createCollection(this.sponDb, id, name, [
-        Permission.read(Role.any()), // Anyone can view this document
-        Permission.update(Role.user(user)), // Writers can update this document
-        Permission.create(Role.user(user)), // Admins can update this document
-        Permission.delete(Role.user(user)), // Admins can delete this document
-      ])
-      .then((res) => {
-        this.databases
-          .createStringAttribute(this.sponDb, id, "name", 50, false)
-          .then((res) => {
-            this.databases
-              .createStringAttribute(this.sponDb, id, "url", 50, false)
-              .then((res) => {
-                for (var i = 0; i < sponsor.length; i++) {
-                  this.databases.createDocument(this.sponDb, id, ID.unique(), {
-                    name: sponsor[i].name,
-                    url: sponsor[i].url,
-                  });
-                }
-              });
-          });
-      });
+  // The Appwrite JS SDK does not support creating collections or attributes via the client SDK.
+  // Please create collections and attributes using the Appwrite Console or Server SDK.
+  createSponColl(id: string, name: string, sponsor: Sponsors[], user: string) {
+    console.warn("createSponColl is not supported via the Appwrite JS SDK. Please create collections and attributes using the Appwrite Console.");
+    // If you want to add documents to an existing collection, you can do so here.
+    // Example:
+    // for (var i = 0; i < sponsor.length; i++) {
+    //   this.databases.createDocument(this.sponDb, id, ID.unique(), {
+    //     name: sponsor[i].name,
+    //     url: sponsor[i].url,
+    //   });
+    // }
   }
 }
 
@@ -231,3 +209,11 @@ class AppwriteConfig {
 }
 
 export {AppwriteConfig, ServerConfig};
+const regDb: string = process.env.NEXT_PUBLIC_REGDB as string;
+const sponDb: string = process.env.NEXT_PUBLIC_SPODB as string;
+const eventCollId: string = process.env.NEXT_PUBLIC_EVENT_COLLID as string;
+const eventBucketId: string = process.env.NEXT_PUBLIC_EVENTBUCKET as string;
+
+export { regDb, sponDb, eventCollId, eventBucketId };
+// const someModule = dynamic(() => import('someModule'), { ssr: false });
+import dynamic from 'next/dynamic';
