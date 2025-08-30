@@ -113,4 +113,24 @@ const EventPage = () => {
   );
 };
 
-// export default EventPage;
+// export default EventPage;// app/api/events/[event]/route.ts
+
+export async function GET(request: Request, { params }: { params: { event: string } }) {
+  const { event } = params;
+
+  // Fetch event data from your database or external service
+  const eventData = await fetchEventDataFromDatabase(event);
+
+  return new Response(JSON.stringify(eventData), {
+    headers: { "Content-Type": "application/json" },
+  });
+}
+
+async function fetchEventDataFromDatabase(event: string) {
+  // Replace this with your actual data fetching logic
+  return {
+    description: `Description for event ${event}`,
+    date: "2025-08-30",
+  };
+}
+
