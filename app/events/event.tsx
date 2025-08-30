@@ -124,7 +124,7 @@ export default function EventListing() {
                               <button
                                 className="ml-4 inline-flex text-gray-700 bg-gray-100 border-0 py-2 px-6 focus:outline-none hover:bg-gray-200 rounded text-lg"
                                 onClick={() => {
-                                  // Correct way to delete an event and its collection
+                                  // Correctly delete the event document
                                   server.databases
                                     .deleteDocument(
                                       `${process.env.NEXT_PUBLIC_DATABASEID}`,
@@ -132,11 +132,10 @@ export default function EventListing() {
                                       `${item.$id}`
                                     )
                                     .then(() => {
-                                      console.log("Event deleted successfully!");
-                                      // You can also delete associated collections or other items here
+                                      console.log("Event document deleted successfully!");
                                     })
                                     .catch((error) => {
-                                      console.error("Error deleting event:", error);
+                                      console.error("Error deleting event document:", error);
                                     });
                                 }}
                               >
