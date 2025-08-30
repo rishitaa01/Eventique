@@ -1,3 +1,4 @@
+"use client";
 import { useRouter } from 'next/navigation';
 const router = useRouter();
 import { Key, ReactElement, JSXElementConstructor, ReactNode, ReactPortal } from "react";
