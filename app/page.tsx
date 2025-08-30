@@ -24,12 +24,11 @@ export default function Home() {
           <div className='flex lg:flex-1'>
             {/* ✅ Use /logo/... instead of importing */}
             import Image from 'next/image';
-            <Image
-              src='/logo/logo-png.png'
-              alt='Eventique Logo'
-              width={150}
-              height={150}
+            <Image src="/logo-transparent-svg.svg"
+            alt="Eventique Logo" 
+            width={200} height={80} 
             />
+
           </div>
           <div className='flex lg:hidden'>
             <button
