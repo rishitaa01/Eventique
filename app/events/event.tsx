@@ -1,15 +1,14 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
+import { useRouter } from 'next/navigation'; // Using Next.js navigation
 import { useEffect, useState } from 'react'; // Correctly import React hooks
-import { Key } from "react";
 
 interface Event {
   $id: string;
   eventname: string;
   agenda: string;
   url: string;
-  created: any;
+  created: string; // Adjusted created type to string
 }
 
 const EventListing = () => {
@@ -23,9 +22,23 @@ const EventListing = () => {
   }, []);
 
   const deleteEvent = (eventId: string) => {
-    // Your delete event logic goes here
+    // Replace deleteCollection() with appropriate Appwrite method.
+    // Assuming deleteDocument is a valid method to delete an event from the collection.
+
+    // Example:
+    // const client = new Client();
+    // const databases = new Databases(client);
+    // databases.deleteDocument('your_collection_id', eventId)
+    // .then(() => {
+    //     // Handle success (e.g., update the UI)
+    // })
+    // .catch((error) => {
+    //     console.error('Error deleting event:', error);
+    // });
+    
     console.log("Deleting event with ID:", eventId);
-    // Example: Call to API to delete event
+    // After successful delete, remove the event from state (UI update)
+    setEvents(events.filter(event => event.$id !== eventId));
   };
 
   return (
