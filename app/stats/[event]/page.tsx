@@ -1,13 +1,25 @@
+import { getEventData } from "./yourDataFetchingLogic";
 import EventPageClient from "./EventPageClient";
 
-interface EventPageProps {
+interface PageProps {
   params: {
     event: string;
   };
 }
 
-export default function EventPage({ params }: EventPageProps) {
-  const { event } = params;
+export default async function EventPage({ params }: PageProps) {
+  // ✅ fetch event data by slug (eventId)
+  const eventData = await getEventData(params.event);
 
-  return <EventPageClient eventId={event} />;
+  const eventWithDetails = {
+    ...eventData,
+    details: eventData?.details ?? "",
+  };
+
+  return (
+    <div>
+      <h1>{eventWithDetails.name}</h1>
+      <EventPageClient eventId={params.event} />
+    </div>
+  );
 }
