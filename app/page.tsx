@@ -15,8 +15,8 @@ export default function Home() {
             <Image 
               src="/logo-transparent-svg.svg"
               alt="Eventique Logo" 
-              width={140}  // 🔥 increased size
-              height={100} // 🔥 increased size
+              width={180}  // 🔥 increased size
+              height={180} // 🔥 increased size
             />
           </div>
           <div className='flex lg:hidden'>

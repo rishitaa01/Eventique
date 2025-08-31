@@ -3,7 +3,6 @@ import Image from 'next/image';
 import '@appwrite.io/pink';
 import { FcGoogle } from 'react-icons/fc';
 import { AiFillGithub } from 'react-icons/ai';
-import { VscWand } from 'react-icons/vsc';
 import { AppwriteConfig } from '../constants/appwrite_config';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
@@ -11,7 +10,8 @@ import { useEffect } from 'react';
 export default function LoginComponent() {
   const router = useRouter();
   const appwriteConfig = new AppwriteConfig();
-  const buttonHandler = (event: React.MouseEvent<HTMLButtonElement>) => {
+
+  const buttonHandler = () => {
     appwriteConfig.googlelog();
   };
 
@@ -21,7 +21,7 @@ export default function LoginComponent() {
     }
   });
 
-  const githublog = (event: React.MouseEvent<HTMLButtonElement>) => {
+  const githublog = () => {
     appwriteConfig.githublog();
   };
 
@@ -29,7 +29,7 @@ export default function LoginComponent() {
     <div className='min-h-screen bg-gray-100 flex flex-col justify-center sm:py-12'>
       <div className='p-10 xs:p-0 mx-auto md:w-full md:max-w-md'>
         <Image
-          src='https://nyc.cloud.appwrite.io/v1/storage/buckets/68b48a120004970b1fb8/files/68b4948b00311cc8327c/view?project=68b097340015d3840771&mode=admin'
+          src='https://nyc.cloud.appwrite.io/v1/storage/buckets/68b48a120004970b1fb8/files/68b4948b00311cc8327c/view?project=68b097340015d3840771'
           alt='company-logo'
           width={200}
           height={200}
@@ -40,7 +40,7 @@ export default function LoginComponent() {
             Login Using
           </div>
           <div className='p-5'>
-            <div className='grid grid-cols-3 gap-1'>
+            <div className='grid grid-cols-2 gap-1'>
               <button
                 onClick={buttonHandler}
                 type='button'
@@ -58,17 +58,7 @@ export default function LoginComponent() {
               >
                 <div className='flex align-items-center gap-1 justify-center mx-auto'>
                   <AiFillGithub className='text-xl my-auto' />
-                  <p className='my-auto'>Github</p>{' '}
-                </div>
-              </button>
-              <button
-                type='button'
-                className='gap-2 transition duration-200 border border-gray-200 text-gray-500 w-full py-2.5 rounded-lg text-sm shadow-sm hover:shadow-md font-normal flex align-items-center'
-                onClick={() => router.push('/login/magic')}
-              >
-                <div className='flex align-items-center gap-1 justify-center mx-auto'>
-                  <VscWand className='text-xl my-auto' />
-                  <p className='my-auto'>Magic URL</p>{' '}
+                  <p className='my-auto'>Github</p>
                 </div>
               </button>
             </div>
@@ -89,9 +79,9 @@ export default function LoginComponent() {
                   className='w-4 h-4 inline-block align-text-top'
                 >
                   <path
-                    stroke-linecap='round'
-                    stroke-linejoin='round'
-                    stroke-width='2'
+                    strokeLinecap='round'
+                    strokeLinejoin='round'
+                    strokeWidth='2'
                     d='M10 19l-7-7m0 0l7-7m-7 7h18'
                   />
                 </svg>
