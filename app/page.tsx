@@ -18,7 +18,7 @@ export default function Home() {
     <div className='bg-white'>
       <header className='absolute inset-x-0 top-0 z-50'>
         <nav
-          className='flex items-center justify-between p-6 lg:px-8'
+          className='flex items-center justify-between p-0 lg:px-8'
           aria-label='Global'
         >
           <div className='flex lg:flex-1'>
@@ -65,7 +65,7 @@ export default function Home() {
             }}
           />
         </div>
-        <div className="mx-auto max-w-2xl py-6 sm:py-10 lg:py-12">
+        <div className="mx-auto max-w-2xl py-12 sm:py-20 lg:py-26">
           <div className='hidden sm:mb-8 sm:flex sm:justify-center'>
             <div className='relative rounded-full px-3 py-1 text-sm leading-6 text-gray-600 ring-1 ring-gray-900/10 hover:ring-gray-900/20'>
               Wish to know how to host a great event?{' '}
