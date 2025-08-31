@@ -1,7 +1,9 @@
 'use client';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { AppwriteConfig } from '../constants/appwrite_config';
+import { AppwriteConfig } from '@/constants/appwrite_config';
+
+
 
 export default function Header() {
   const [userInfo, setUserInfo] = useState<any>(null);

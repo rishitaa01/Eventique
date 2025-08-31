@@ -1,10 +1,22 @@
+// app/login/success/page.tsx
 'use client';
-import dynamic from 'next/dynamic';
+import { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import { AppwriteConfig } from '@/constants/appwrite_config';
 
-const LoginFailureClient = dynamic(() => import('./LoginFailureClient'), {
-  ssr: false, // 🚀 disables server-side rendering
-});
 
-export default function Page() {
-  return <LoginFailureClient />;
+export default function Success() {
+  const router = useRouter();
+  const appwrite = new AppwriteConfig();
+
+  useEffect(() => {
+    appwrite.getCurUser().then((user: any) => {
+      if (user) {
+        localStorage.setItem('userInfo', JSON.stringify(user));
+        router.push('/landing');
+      }
+    });
+  }, []);
+
+  return <p>Logging you in...</p>;
 }

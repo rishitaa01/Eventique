@@ -21,7 +21,7 @@ export default function LoginComponent() {
     <div className='min-h-screen bg-gray-100 flex flex-col justify-center sm:py-12'>
       <div className='p-10 xs:p-0 mx-auto md:w-full md:max-w-md'>
         <Image
-          src='/logo-png.png'  // keep your logo
+          src='/logo-transparent-png.png'  // keep your logo
           alt='company-logo'
           width={200}
           height={200}
