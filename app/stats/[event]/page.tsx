@@ -1,4 +1,4 @@
-import { getEventData } from "../../yourDataFetchingLogic"; // adjust path if needed
+import { getEventData } from "./yourDataFetchingLogic"; // adjust path if needed
 import EventPageClient from "./EventPageClient";
 
 // ✅ Props for Next.js dynamic routes
