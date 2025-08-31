@@ -1,7 +1,7 @@
 'use client';
 
 import { ChangeEvent, FormEvent, useState } from 'react';
-import { AppwriteConfig } from '../constants/appwrite_config';
+import { AppwriteConfig } from '../constants/appwrite_config.tsx';
 import { useRouter } from 'next/navigation';
 import { PhotoIcon } from '@heroicons/react/24/solid';
 import Header from '../components/header';

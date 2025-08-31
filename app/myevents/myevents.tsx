@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { AppwriteConfig, ServerConfig } from '../constants/appwrite_config';
+import { AppwriteConfig, ServerConfig } from '../constants/appwrite_config.tsx';
 import Header from '../components/header';
 import { Models, Client } from 'appwrite';
 import { MdOutlinePlace } from 'react-icons/md';

@@ -5,6 +5,7 @@ import { AppwriteConfig } from '@/constants/appwrite_config';
 
 
 
+
 export default function Header() {
   const [userInfo, setUserInfo] = useState<any>(null);
   const appwriteConfig = new AppwriteConfig();
