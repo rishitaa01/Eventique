@@ -2,11 +2,11 @@
 
 import { useEffect, useState } from 'react';
 import { Models, Client } from 'appwrite';
-import { AppwriteConfig } from '../../constants/appwrite_config.tsx';
+import { AppwriteConfig } from '@/constants/appwrite_config';
 
 import CsvDownloader from 'react-csv-downloader';
 
-import Header from '@/app/components/header';
+import Header from '@/components/header';
 
 export default function Event({ params }: { params: { event: string } }) {
   const appwriteConfig = new AppwriteConfig();
