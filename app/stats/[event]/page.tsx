@@ -1,9 +1,9 @@
 import EventPageClient from './EventPageClient';
 
-interface PageProps {
+export default function EventPage({
+  params,
+}: {
   params: { event: string };
-}
-
-export default function EventPage({ params }: PageProps) {
+}) {
   return <EventPageClient eventId={params.event} />;
 }
