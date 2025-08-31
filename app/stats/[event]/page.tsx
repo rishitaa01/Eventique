@@ -1,9 +1,13 @@
-import EventPageClient from './EventPageClient';
+import EventPageClient from "./EventPageClient";
 
-interface PageProps {
-  params: { event: string };
+interface EventPageProps {
+  params: {
+    event: string;
+  };
 }
 
-export default function EventPage({ params }: PageProps) {
-  return <EventPageClient eventId={params.event} />;
+export default function EventPage({ params }: EventPageProps) {
+  const { event } = params;
+
+  return <EventPageClient eventId={event} />;
 }

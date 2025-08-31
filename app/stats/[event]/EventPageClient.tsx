@@ -1,10 +1,10 @@
-'use client';
+"use client";
 
-import { useEffect, useState } from 'react';
-import { Models } from 'appwrite';
-import { AppwriteConfig } from '@/constants/appwrite_config';
-import CsvDownloader from 'react-csv-downloader';
-import Header from '@/components/header';
+import { useEffect, useState } from "react";
+import { Models } from "appwrite";
+import { AppwriteConfig } from "@/constants/appwrite_config";
+import CsvDownloader from "react-csv-downloader";
+import Header from "@/components/header";
 
 interface EventPageClientProps {
   eventId: string;
@@ -17,10 +17,10 @@ export default function EventPageClient({ eventId }: EventPageClientProps) {
 
   const callAPI = async (email: string, subject: string, message: string) => {
     try {
-      await fetch('https://send-grid-api.vercel.app/sendemail', {
-        method: 'POST',
+      await fetch("https://send-grid-api.vercel.app/sendemail", {
+        method: "POST",
         body: JSON.stringify({ email, subject, message }),
-        headers: { 'content-type': 'application/json' },
+        headers: { "content-type": "application/json" },
       });
     } catch (err) {
       console.error(err);
@@ -66,22 +66,25 @@ export default function EventPageClient({ eventId }: EventPageClientProps) {
       }
     );
 
-    return () => unsubscribe();
-  }, [eventId]);
+    return () => {
+      // ✅ unsubscribe properly to avoid memory leaks
+      if (typeof unsubscribe === "function") unsubscribe();
+    };
+  }, [eventId]); // ✅ only re-run when eventId changes
 
   const handleAcceptanceEmail = (id: string, name: string, email: string) => {
     appwriteConfig.databases
       .updateDocument(process.env.NEXT_PUBLIC_REGDB!, eventId, id, {
-        confirm: 'accept',
+        confirm: "accept",
       })
       .then(() => {
         callAPI(
           email,
-          `Knock Knock, Seems like your lucky day`,
+          "Knock Knock, Seems like your lucky day",
           `Hey ${name}, You have been accepted to attend ${
             event?.eventname
           }. Contact the host at ${
-            JSON.parse(localStorage.getItem('userInfo') || '{}').email
+            JSON.parse(localStorage.getItem("userInfo") || "{}").email
           } for any queries.`
         );
       });
@@ -90,16 +93,16 @@ export default function EventPageClient({ eventId }: EventPageClientProps) {
   const handleRejectionEmail = (id: string, name: string, email: string) => {
     appwriteConfig.databases
       .updateDocument(process.env.NEXT_PUBLIC_REGDB!, eventId, id, {
-        confirm: 'reject',
+        confirm: "reject",
       })
       .then(() => {
         callAPI(
           email,
-          `We appreciate your interest in the event.`,
+          "We appreciate your interest in the event.",
           `Hey ${name}, we regret to inform you that your invitation has been cancelled to attend ${
             event?.eventname
           }. Contact the host at ${
-            JSON.parse(localStorage.getItem('userInfo') || '{}').email
+            JSON.parse(localStorage.getItem("userInfo") || "{}").email
           } for any queries.`
         );
       });
@@ -109,14 +112,22 @@ export default function EventPageClient({ eventId }: EventPageClientProps) {
     <div>
       <Header />
       <div className="container mx-auto p-8">
-        <h1 className="text-3xl font-bold mb-6">Event Attendees</h1>
+        <h1 className="text-3xl font-bold mb-6">
+          {event ? event.eventname : "Event Attendees"}
+        </h1>
         <div className="overflow-x-auto">
           <table className="w-full bg-white shadow rounded-lg">
             <thead>
               <tr>
-                <th className="py-3 px-6 bg-gray-200 text-gray-700 font-bold uppercase">Name</th>
-                <th className="py-3 px-6 bg-gray-200 text-gray-700 font-bold uppercase">Email</th>
-                <th className="py-3 px-6 bg-gray-200 text-gray-700 font-bold uppercase">Actions</th>
+                <th className="py-3 px-6 bg-gray-200 text-gray-700 font-bold uppercase">
+                  Name
+                </th>
+                <th className="py-3 px-6 bg-gray-200 text-gray-700 font-bold uppercase">
+                  Email
+                </th>
+                <th className="py-3 px-6 bg-gray-200 text-gray-700 font-bold uppercase">
+                  Actions
+                </th>
               </tr>
             </thead>
             <tbody>
@@ -125,10 +136,10 @@ export default function EventPageClient({ eventId }: EventPageClientProps) {
                   <td className="py-4 px-6">{attendee.name}</td>
                   <td className="py-3 px-6">{attendee.email}</td>
                   <td className="py-4">
-                    {attendee.confirm === 'accept' ? (
+                    {attendee.confirm === "accept" ? (
                       <button
                         className="bg-green-800 text-white px-4 py-2 rounded mr-2"
-                        onClick={() => alert('Already sent Acceptance mail')}
+                        onClick={() => alert("Already sent Acceptance mail")}
                       >
                         Accepted
                       </button>
@@ -136,16 +147,20 @@ export default function EventPageClient({ eventId }: EventPageClientProps) {
                       <button
                         className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded mr-2"
                         onClick={() =>
-                          handleAcceptanceEmail(attendee.$id, attendee.name, attendee.email)
+                          handleAcceptanceEmail(
+                            attendee.$id,
+                            attendee.name,
+                            attendee.email
+                          )
                         }
                       >
                         Accept
                       </button>
                     )}
-                    {attendee.confirm === 'reject' ? (
+                    {attendee.confirm === "reject" ? (
                       <button
                         className="bg-red-800 text-white px-4 py-2 rounded"
-                        onClick={() => alert('Already sent Rejection mail')}
+                        onClick={() => alert("Already sent Rejection mail")}
                       >
                         Rejected
                       </button>
@@ -153,7 +168,11 @@ export default function EventPageClient({ eventId }: EventPageClientProps) {
                       <button
                         className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded"
                         onClick={() =>
-                          handleRejectionEmail(attendee.$id, attendee.name, attendee.email)
+                          handleRejectionEmail(
+                            attendee.$id,
+                            attendee.name,
+                            attendee.email
+                          )
                         }
                       >
                         Reject
@@ -166,7 +185,11 @@ export default function EventPageClient({ eventId }: EventPageClientProps) {
           </table>
         </div>
         <div className="mt-6 flex justify-center">
-          <CsvDownloader datas={asyncFnComputeData} filename="reg" text="Export Registrations" />
+          <CsvDownloader
+            datas={asyncFnComputeData}
+            filename="registrations"
+            text="Export Registrations"
+          />
         </div>
       </div>
     </div>
