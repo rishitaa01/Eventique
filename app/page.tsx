@@ -17,7 +17,7 @@ export default function Home() {
   return (
     <div className='bg-white'>
       <header className='absolute inset-x-0 top-0 z-50'>
-        <nav className="flex items-center justify-between py-2 px-6 lg:px-8" aria-label="Global">
+        <nav className="flex items-center justify-between py-1 px-6 lg:px-8" aria-label="Global">
           <div className='flex lg:flex-1'>
             {/* ✅ Use /logo/... instead of importing */}
             <Image src="/logo-transparent-svg.svg"
