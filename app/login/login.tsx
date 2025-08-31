@@ -11,25 +11,17 @@ export default function LoginComponent() {
   const router = useRouter();
   const appwriteConfig = new AppwriteConfig();
 
-  const buttonHandler = () => {
-    appwriteConfig.googlelog();
-  };
-
   useEffect(() => {
     if (localStorage.getItem('userInfo') !== null) {
       router.push('/landing');
     }
   });
 
-  const githublog = () => {
-    appwriteConfig.githublog();
-  };
-
   return (
     <div className='min-h-screen bg-gray-100 flex flex-col justify-center sm:py-12'>
       <div className='p-10 xs:p-0 mx-auto md:w-full md:max-w-md'>
         <Image
-          src='https://nyc.cloud.appwrite.io/v1/storage/buckets/68b48a120004970b1fb8/files/68b4948b00311cc8327c/view?project=68b097340015d3840771'
+          src='/logo-png.png'  // keep your logo
           alt='company-logo'
           width={200}
           height={200}
@@ -41,9 +33,10 @@ export default function LoginComponent() {
           </div>
           <div className='p-5'>
             <div className='grid grid-cols-2 gap-1'>
+              {/* ✅ Google login */}
               <button
-                onClick={buttonHandler}
                 type='button'
+                onClick={() => appwriteConfig.googlelog()}
                 className='gap-2 transition duration-200 border border-gray-200 text-gray-500 w-full py-2.5 rounded-lg text-sm shadow-sm hover:shadow-md font-normal flex align-items-center'
               >
                 <div className='flex align-items-center gap-1 justify-center mx-auto'>
@@ -51,10 +44,12 @@ export default function LoginComponent() {
                   <p className='my-auto'>Google</p>
                 </div>
               </button>
+
+              {/* ✅ GitHub login */}
               <button
                 type='button'
+                onClick={() => appwriteConfig.githublog()}
                 className='gap-2 transition duration-200 border border-gray-200 text-gray-500 w-full py-2.5 rounded-lg text-sm shadow-sm hover:shadow-md font-normal flex align-items-center'
-                onClick={githublog}
               >
                 <div className='flex align-items-center gap-1 justify-center mx-auto'>
                   <AiFillGithub className='text-xl my-auto' />
@@ -64,6 +59,7 @@ export default function LoginComponent() {
             </div>
           </div>
         </div>
+
         <div className='py-5'>
           <div className='grid grid-cols-2 gap-1'>
             <div className='text-center sm:text-left whitespace-nowrap'>
