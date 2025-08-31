@@ -2,7 +2,7 @@
 'use client';
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { AppwriteConfig } from './constants/appwrite_config';
+import { AppwriteConfig } from '@/constants/appwrite_config';
 
 
 export default function Success() {
