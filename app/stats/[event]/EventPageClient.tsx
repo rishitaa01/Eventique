@@ -5,15 +5,16 @@ import { Models } from "appwrite";
 import { AppwriteConfig } from "@/constants/appwrite_config";
 import CsvDownloader from "react-csv-downloader";
 import Header from "@/components/header";
+import { Event } from "@/types/event";
 
 interface EventPageClientProps {
-  eventId: string;
+  event: Event;
 }
 
-export default function EventPageClient({ eventId }: EventPageClientProps) {
+export default function EventPageClient({ event }: EventPageClientProps) {
   const appwriteConfig = new AppwriteConfig();
   const [docs, setDocs] = useState<Models.Document[]>([]);
-  const [event, setEvent] = useState<Models.Document | null>(null);
+  const [Event, setEvent] = useState<Models.Document | null>(null);
 
   const callAPI = async (email: string, subject: string, message: string) => {
     try {
@@ -38,7 +39,7 @@ export default function EventPageClient({ eventId }: EventPageClientProps) {
   useEffect(() => {
     // Fetch attendees
     appwriteConfig.databases
-      .listDocuments(process.env.NEXT_PUBLIC_REGDB!, eventId)
+      .listDocuments(process.env.NEXT_PUBLIC_REGDB!, event.id)
       .then(
         (response) => setDocs(response.documents),
         () => setDocs([])
@@ -49,16 +50,16 @@ export default function EventPageClient({ eventId }: EventPageClientProps) {
       .getDocument(
         process.env.NEXT_PUBLIC_DATABASEID!,
         process.env.NEXT_PUBLIC_EVENT_COLLID!,
-        eventId
+        event.id
       )
       .then((response) => setEvent(response));
 
     // Subscribe to real-time updates
     const unsubscribe = appwriteConfig.client.subscribe(
-      `databases.${process.env.NEXT_PUBLIC_REGDB}.collections.${eventId}.documents`,
+      `databases.${process.env.NEXT_PUBLIC_REGDB}.collections.${event}.documents`,
       () => {
         appwriteConfig.databases
-          .listDocuments(process.env.NEXT_PUBLIC_REGDB!, eventId)
+          .listDocuments(process.env.NEXT_PUBLIC_REGDB!, event.id)
           .then(
             (response) => setDocs(response.documents),
             () => setDocs([])
@@ -70,11 +71,11 @@ export default function EventPageClient({ eventId }: EventPageClientProps) {
       // ✅ unsubscribe properly to avoid memory leaks
       if (typeof unsubscribe === "function") unsubscribe();
     };
-  }, [eventId]); // ✅ only re-run when eventId changes
+  }, [event]); // ✅ only re-run when eventId changes
 
   const handleAcceptanceEmail = (id: string, name: string, email: string) => {
     appwriteConfig.databases
-      .updateDocument(process.env.NEXT_PUBLIC_REGDB!, eventId, id, {
+      .updateDocument(process.env.NEXT_PUBLIC_REGDB!, event.id, id, {
         confirm: "accept",
       })
       .then(() => {
@@ -82,7 +83,7 @@ export default function EventPageClient({ eventId }: EventPageClientProps) {
           email,
           "Knock Knock, Seems like your lucky day",
           `Hey ${name}, You have been accepted to attend ${
-            event?.eventname
+            event?.name
           }. Contact the host at ${
             JSON.parse(localStorage.getItem("userInfo") || "{}").email
           } for any queries.`
@@ -92,7 +93,7 @@ export default function EventPageClient({ eventId }: EventPageClientProps) {
 
   const handleRejectionEmail = (id: string, name: string, email: string) => {
     appwriteConfig.databases
-      .updateDocument(process.env.NEXT_PUBLIC_REGDB!, eventId, id, {
+      .updateDocument(process.env.NEXT_PUBLIC_REGDB!, event.id, id, {
         confirm: "reject",
       })
       .then(() => {
@@ -100,7 +101,7 @@ export default function EventPageClient({ eventId }: EventPageClientProps) {
           email,
           "We appreciate your interest in the event.",
           `Hey ${name}, we regret to inform you that your invitation has been cancelled to attend ${
-            event?.eventname
+            event?.name
           }. Contact the host at ${
             JSON.parse(localStorage.getItem("userInfo") || "{}").email
           } for any queries.`
@@ -113,7 +114,7 @@ export default function EventPageClient({ eventId }: EventPageClientProps) {
       <Header />
       <div className="container mx-auto p-8">
         <h1 className="text-3xl font-bold mb-6">
-          {event ? event.eventname : "Event Attendees"}
+          {event ? event.name : "Event Attendees"}
         </h1>
         <div className="overflow-x-auto">
           <table className="w-full bg-white shadow rounded-lg">

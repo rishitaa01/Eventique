@@ -1,5 +1,6 @@
-import { getEventData } from "./yourDataFetchingLogic";
+import { getEventData } from "./yourDataFetchingLogic"; // adjust path
 import EventPageClient from "./EventPageClient";
+import { Event } from "@/types/event";  // ✅ shared type
 
 interface PageProps {
   params: {
@@ -7,19 +8,23 @@ interface PageProps {
   };
 }
 
+export async function generateStaticParams() {
+  return [{ event: "event1" }, { event: "event2" }];
+}
+
 export default async function EventPage({ params }: PageProps) {
-  // ✅ fetch event data by slug (eventId)
   const eventData = await getEventData(params.event);
 
-  const eventWithDetails = {
-    ...eventData,
+  const eventWithDetails: Event = {
+    id: params.event,
+    name: eventData?.name ?? "Untitled Event",
     details: eventData?.details ?? "",
   };
 
   return (
     <div>
       <h1>{eventWithDetails.name}</h1>
-      <EventPageClient eventId={params.event} />
+      <EventPageClient event={eventWithDetails} /> {/* ✅ matches types */}
     </div>
   );
 }
