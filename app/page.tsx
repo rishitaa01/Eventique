@@ -3,13 +3,6 @@ import { useState } from 'react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 
-const navigation = [
-  { name: 'Product', href: '#' },
-  { name: 'Features', href: '#' },
-  { name: 'Company', href: '#' },
-  { name: 'FAQ', href: '#' },
-];
-
 export default function Home() {
   const router = useRouter();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -22,7 +15,8 @@ export default function Home() {
             <Image 
               src="/logo-transparent-svg.svg"
               alt="Eventique Logo" 
-              width={100} height={80} 
+              width={140}  // 🔥 increased size
+              height={100} // 🔥 increased size
             />
           </div>
           <div className='flex lg:hidden'>
@@ -34,17 +28,7 @@ export default function Home() {
               <span className='sr-only'>Open main menu</span>
             </button>
           </div>
-          <div className='hidden lg:flex lg:gap-x-12'>
-            {navigation.map((item) => (
-              <a
-                key={item.name}
-                href={item.href}
-                className='text-sm font-semibold leading-6 text-gray-900'
-              >
-                {item.name}
-              </a>
-            ))}
-          </div>
+          {/* 🔥 Navigation buttons removed */}
         </nav>
       </header>
 
@@ -99,12 +83,7 @@ export default function Home() {
               >
                 Get started
               </button>
-              <a
-                href='#'
-                className='text-sm font-semibold leading-6 text-gray-900'
-              >
-                Learn more <span aria-hidden='true'>→</span>
-              </a>
+              {/* 🔥 Removed "Learn more →" link */}
             </div>
           </div>
         </div>
