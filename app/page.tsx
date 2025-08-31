@@ -17,7 +17,7 @@ export default function Home() {
   return (
     <div className='bg-white'>
       <header className="fixed top-0 left-0 right-0 z-50 m-0 p-0">
-        <nav className="flex items-center justify-between px-4 py-2 lg:px-6 m-0">
+        <nav className="flex items-center justify-between px-4 py-1 lg:px-6 m-0">
 
 
           <div className='flex lg:flex-1'>
@@ -51,7 +51,7 @@ export default function Home() {
         </nav>
       </header>
 
-      <div className="relative isolate px-6 pt-4 lg:px-8">
+      <div className="relative isolate px-6 lg:px-8">
         <div
           className='absolute inset-x-0 -top-40 -z-10 transform-gpu overflow-hidden blur-3xl sm:-top-80'
           aria-hidden='true'
