@@ -17,10 +17,8 @@ export default function Home() {
   return (
     <div className='bg-white'>
       <header className="fixed top-0 left-0 right-0 z-50 m-0 p-0">
-        {/* ✅ nav spacing updated */}
         <nav className="flex items-center justify-between px-3 py-0 lg:px-6 m-0">
           <div className='flex lg:flex-1'>
-            {/* ✅ logo width reduced to 100 */}
             <Image 
               src="/logo-transparent-svg.svg"
               alt="Eventique Logo" 
@@ -63,8 +61,8 @@ export default function Home() {
             }}
           />
         </div>
-        {/* ✅ padding updated from py-12 → py-14 */}
-        <div className="mx-auto max-w-2xl py-14 sm:py-20 lg:py-24">
+        {/* ✅ Added mt-24 so content isn’t stuck at the top */}
+        <div className="mx-auto max-w-2xl mt-24 py-14 sm:py-20 lg:py-24">
           <div className='hidden sm:mb-8 sm:flex sm:justify-center'>
             <div className='relative rounded-full px-3 py-1 text-sm leading-6 text-gray-600 ring-1 ring-gray-900/10 hover:ring-gray-900/20'>
               Wish to know how to host a great event?{' '}
@@ -110,7 +108,6 @@ export default function Home() {
             </div>
           </div>
         </div>
-        {/* ✅ bottom gradient position updated (100% → 98%) */}
         <div
           className='absolute inset-x-0 top-[calc(98%-13rem)] -z-10 transform-gpu overflow-hidden blur-3xl sm:top-[calc(100%-20rem)]'
           aria-hidden='true'
