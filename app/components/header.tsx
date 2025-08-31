@@ -20,7 +20,7 @@ export default function Header() {
     <button
       onClick={async () => {
         if (userInfo) {
-          const success = await appwriteConfig.signOut(userInfo.$id);
+          const success = await appwriteConfig.signOut();
           if (success) {
             localStorage.removeItem('userInfo');
             router.push('/login');
