@@ -1,8 +1,8 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { Models } from 'appwrite'; // only needed if you want Appwrite typing
-import { appwrite } from '@/constants/appwrite_config'; // gives you account, databases, etc.
+import type { Models } from 'appwrite'; // type-only
+import appwriteConfig, { ServerConfig } from '@/constants/appwrite_config';
 
 interface EventData {
   $id?: string;
@@ -16,14 +16,13 @@ interface EventData {
 export default function EventPageClient({ event }: { event: EventData }) {
   const [eventData, setEventData] = useState<EventData>(event);
 
-  // Example: fetch fresh event data from Appwrite (optional)
   useEffect(() => {
     async function fetchEvent() {
       try {
         if (!eventData.$id) return;
-        const res = await appwrite.databases.getDocument(
-          appwrite.databaseId,
-          appwrite.activeCollId,
+        const res = await appwriteConfig.databases.getDocument(
+          ServerConfig.databaseId,   // ✅ use config IDs
+          ServerConfig.collectionId, // ✅ use config IDs
           eventData.$id
         );
         setEventData(res as unknown as EventData);

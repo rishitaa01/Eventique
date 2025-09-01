@@ -1,62 +1,100 @@
-'use client';
-
-import {
-  Client,
-  Account,
-  Models,
-  ID,
-  Databases,
-  Storage,
-} from 'appwrite';
-import { User } from './interface';
+"use client";
+import { Client, Account, Databases, Storage, ID } from "appwrite";
 
 export class AppwriteConfig {
-  databaseId = process.env.NEXT_PUBLIC_DATABASEID as string;
-  activeCollId = process.env.NEXT_PUBLIC_EVENT_COLLID as string;
-  bannerBucketId = process.env.NEXT_PUBLIC_EVENTBUCKET as string;
+  client: Client;
+  account: Account;
+  databases: Databases;
+  storage: Storage;
 
-  client: Client = new Client();
-  account: Account = new Account(this.client);
-  databases: Databases = new Databases(this.client);
-  storage: Storage = new Storage(this.client);
-  user: User = {} as User;
+  databaseId = "68b48a43000746da320c";      // 🔹 replace with your Appwrite DB ID
+  activeCollId = "68b48f1e000a58d3f9f0";  // 🔹 replace with your Collection ID
+  bannerBucketId = "68b48a12000497b1fb8";    // 🔹 replace with your Storage bucket ID
 
   constructor() {
-    this.client
-      .setEndpoint(process.env.NEXT_PUBLIC_ENDPOINT as string)
-      .setProject(process.env.NEXT_PUBLIC_PROJECTID as string);
-  }
+    this.client = new Client()
+      .setEndpoint("https://nyc.cloud.appwrite.io/v1") // 🔹 or self-hosted endpoint
+      .setProject("68b097340015d3840771");              // 🔹 replace with your Project ID
 
-  // Google OAuth
-  googlelog() {
-    this.account.createOAuth2Session(
-      'google',
-      `${process.env.NEXT_PUBLIC_APPURL}/login/success`,
-      `${process.env.NEXT_PUBLIC_APPURL}/login/failure`
-    );
+    this.account = new Account(this.client);
+    this.databases = new Databases(this.client);
+    this.storage = new Storage(this.client);
   }
-
-  // GitHub OAuth
-  githublog() {
-    this.account.createOAuth2Session(
-      'github',
-      `${process.env.NEXT_PUBLIC_APPURL}/login/success`,
-      `${process.env.NEXT_PUBLIC_APPURL}/login/failure`
-    );
-  }
-
-  // Current user
-  async getCurUser(): Promise<User | null> {
+  // ✅ Get Current User
+  async getCurUser() {
     try {
-      const res = await this.account.get();
-      this.user = res as unknown as User;
-      localStorage.setItem('userInfo', JSON.stringify(this.user));
-      return this.user;
-    } catch {
+      return await this.account.get();
+    } catch (error) {
+      console.error("Error getting current user:", error);
       return null;
+    }
+  }
+  // ✅ Google Login
+  async googlelog() {
+    const successUrl = `${window.location.origin}/landing`;
+    const failureUrl = `${window.location.origin}/login`;
+    return this.account.createOAuth2Session("google", successUrl, failureUrl);
+  }
+
+  // ✅ GitHub Login
+  async githublog() {
+    const successUrl = `${window.location.origin}/landing`;
+    const failureUrl = `${window.location.origin}/login`;
+    return this.account.createOAuth2Session("github", successUrl, failureUrl);
+  }
+
+  // ✅ Sign Out
+  async signOut() {
+    try {
+      await this.account.deleteSession("current");
+      localStorage.removeItem("userInfo");
+      return true;
+    } catch (error) {
+      console.error("Sign out failed:", error);
+      return false;
+    }
+  }
+
+  // ✅ Create Event with all fields + banner upload
+  async createEvent(eventname: string, description: string, data: Record<string, any>, hostname: string, eventdate: string, email: string, country: string, address: string, city: string, state: string, postal: string, audience: string, type: string, attendees: number, price: number, tech: string, agenda: string, approval: string, twitter: string, website: string, linkedin: string, instagram: string, banner: File) {
+    try {
+      // 1. Upload banner file
+      let uploadedFile = null;
+      if (banner && banner.size > 0) {
+        uploadedFile = await this.storage.createFile(
+          this.bannerBucketId,
+          ID.unique(),
+          banner
+        );
+      }
+
+      // 2. Create event document
+      const res = await this.databases.createDocument(
+        this.databaseId,
+        this.activeCollId,
+        ID.unique(),
+        {
+          ...data,
+          bannerId: uploadedFile ? uploadedFile.$id : null,
+        }
+      );
+
+      return res;
+    } catch (error) {
+      console.error("Create event failed:", error);
+      throw error;
     }
   }
 }
 
-// ✅ Export both the class and an instance
-export const appwrite = new AppwriteConfig();
+// 🔹 Export singleton instance
+
+export const ServerConfig = {
+  endpoint: process.env.NEXT_PUBLIC_ENDPOINT!,
+  projectId: process.env.NEXT_PUBLIC_PROJECTID!,
+  databaseId: process.env.NEXT_PUBLIC_DATABASEID!,
+  collectionId: process.env.NEXT_PUBLIC_EVENT_COLLID!,
+  bucketId: process.env.NEXT_PUBLIC_BUCKET!,
+};
+const appwriteConfig = new AppwriteConfig();
+export default appwriteConfig;

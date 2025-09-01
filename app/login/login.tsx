@@ -12,16 +12,37 @@ export default function LoginComponent() {
   const appwriteConfig = new AppwriteConfig();
 
   useEffect(() => {
+    // If already logged in, redirect immediately
     if (localStorage.getItem('userInfo') !== null) {
       router.push('/landing');
     }
-  });
+  }, [router]);
+
+  // ✅ Handle Google login
+  const handleGoogleLogin = async () => {
+    try {
+      await appwriteConfig.googlelog();
+      router.push('/landing'); // redirect after login
+    } catch (err) {
+      console.error('Google login failed:', err);
+    }
+  };
+
+  // ✅ Handle GitHub login
+  const handleGithubLogin = async () => {
+    try {
+      await appwriteConfig.githublog();
+      router.push('/landing'); // redirect after login
+    } catch (err) {
+      console.error('GitHub login failed:', err);
+    }
+  };
 
   return (
     <div className='min-h-screen bg-gray-100 flex flex-col justify-center sm:py-12'>
       <div className='p-10 xs:p-0 mx-auto md:w-full md:max-w-md'>
         <Image
-          src='/logo-transparent-png.png'  // keep your logo
+          src='/logo-transparent-png.png'
           alt='company-logo'
           width={200}
           height={200}
@@ -36,7 +57,7 @@ export default function LoginComponent() {
               {/* ✅ Google login */}
               <button
                 type='button'
-                onClick={() => appwriteConfig.googlelog()}
+                onClick={handleGoogleLogin}
                 className='gap-2 transition duration-200 border border-gray-200 text-gray-500 w-full py-2.5 rounded-lg text-sm shadow-sm hover:shadow-md font-normal flex align-items-center'
               >
                 <div className='flex align-items-center gap-1 justify-center mx-auto'>
@@ -48,7 +69,7 @@ export default function LoginComponent() {
               {/* ✅ GitHub login */}
               <button
                 type='button'
-                onClick={() => appwriteConfig.githublog()}
+                onClick={handleGithubLogin}
                 className='gap-2 transition duration-200 border border-gray-200 text-gray-500 w-full py-2.5 rounded-lg text-sm shadow-sm hover:shadow-md font-normal flex align-items-center'
               >
                 <div className='flex align-items-center gap-1 justify-center mx-auto'>

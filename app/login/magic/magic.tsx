@@ -1,5 +1,5 @@
 'use client';
-import { AppwriteConfig } from '../../constants/appwrite_config.tsx';
+import { AppwriteConfig } from '../../constants/appwrite_config';
 import { useState } from 'react';
 
 export default function MagicUrl() {
@@ -11,10 +11,7 @@ export default function MagicUrl() {
     console.log('value is:', event.target.value);
   };
 
-  const buttonHandler = (event: React.MouseEvent<HTMLButtonElement>) => {
-    const appwriteConfig = new AppwriteConfig();
-    appwriteConfig.magicUrlLogin(email);
-  };
+
 
   return (
     <div className='content-center justify-center mu-auto'>
@@ -57,12 +54,6 @@ export default function MagicUrl() {
                 />
               </div>
               <div>
-                <button
-                  onClick={buttonHandler}
-                  className='py-3 px-10 text-sm font-medium text-center text-white rounded-lg border cursor-pointer bg-[#f02e65] border-primary-600 sm:rounded-none sm:rounded-r-lg hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800'
-                >
-                  Send
-                </button>
               </div>
             </div>
             <div className='mx-auto max-w-screen-sm text-sm text-left text-gray-800 newsletter-form-footer dark:text-gray-800'>

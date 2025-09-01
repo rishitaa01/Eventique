@@ -1,22 +1,20 @@
-// app/login/success/page.tsx
+// app/login/failure/page.tsx
 'use client';
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { AppwriteConfig } from '@/constants/appwrite_config';
+import appwriteConfig from '@/constants/appwrite_config'; // ✅ default export
 
-
-export default function Success() {
+export default function Failure() {
   const router = useRouter();
-  const appwrite = new AppwriteConfig();
 
   useEffect(() => {
-    appwrite.getCurUser().then((user: any) => {
+    appwriteConfig.getCurUser().then((user: any) => {
       if (user) {
         localStorage.setItem('userInfo', JSON.stringify(user));
-        router.push('/landing');
+        router.push('/landing'); // ✅ send to landing if still logged in
       }
     });
-  }, []);
+  }, [router]);
 
-  return <p>Logging you in...</p>;
+  return <p>Login failed. Please try again.</p>;
 }

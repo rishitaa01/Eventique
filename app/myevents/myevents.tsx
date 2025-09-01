@@ -1,16 +1,16 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { AppwriteConfig, ServerConfig } from '../constants/appwrite_config.tsx';
 import Header from '../components/header';
 import { Models, Client } from 'appwrite';
 import { MdOutlinePlace } from 'react-icons/md';
 import { IoIosPeople } from 'react-icons/io';
 import { useRouter } from 'next/router';
+import appwriteConfig, { ServerConfig } from '../constants/appwrite_config';
+
 
 export default function MyEvents() {
-  const appwriteConfig = new AppwriteConfig();
-  const server = new ServerConfig();
+  const server = ServerConfig;
 
   const [events, setEvents] = useState<Models.Document[]>([]);
   const [loader, setLoader] = useState(false);
@@ -122,22 +122,20 @@ export default function MyEvents() {
                               <button
                                 className='ml-4 inline-flex text-gray-700 bg-gray-100 border-0 py-2 px-6 focus:outline-none hover:bg-gray-200 rounded text-lg'
                                 onClick={() => {
-                                  server.databases
+                                    appwriteConfig.databases
                                     .deleteDocument(
-                                      `${process.env.NEXT_PUBLIC_DATABASEID}`,
-                                      `${process.env.NEXT_PUBLIC_EVENT_COLLID}`,
-                                      `${item.$id}`,
-                                    )
-                                    .then(() => {
-                                      alert('Event deleted successfully!');
-                                    })
-                                    .catch((error) => {
-                                      console.error(
-                                        'Error deleting event:',
-                                        error,
-                                      );
-                                    });
-                                }}
+                                    server.databaseId,   // ✅ use the id from ServerConfig
+                                    server.collectionId, // ✅ use the id from ServerConfig
+                                    item.$id             // ✅ document id
+                                                                )
+                                  .then(() => {
+                                    alert('Event deleted successfully!');
+                                  })
+                                  .catch((error) => {
+                                    console.error('Error deleting event:', error);
+                                  });
+                              }}
+
                               >
                                 Delete Event
                               </button>

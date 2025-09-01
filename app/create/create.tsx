@@ -1,7 +1,7 @@
 'use client';
 
 import { ChangeEvent, FormEvent, useState } from 'react';
-import { AppwriteConfig } from '../constants/appwrite_config.tsx';
+import { AppwriteConfig } from '../constants/appwrite_config';
 import { useRouter } from 'next/navigation';
 import { PhotoIcon } from '@heroicons/react/24/solid';
 import Header from '../components/header';
@@ -75,7 +75,7 @@ const CreateEventPage = () => {
       .createEvent(
         eventname,
         description,
-        banner || new File([], ''),
+        {},
         hostname,
         eventdate,
         email,
@@ -90,19 +90,21 @@ const CreateEventPage = () => {
         price,
         tech,
         agenda,
-        sponsors,
         approval,
         twitter,
         website,
         linkedin,
         instagram,
+        banner || new File([], ''),
       )
       .then((res) => {
-        if (res == 'sucess') {
-          router.push('/events');
-        } else {
-        }
-      });
+  if (res && res.$id) {
+    router.push('/events');
+  } else {
+    console.error("Event creation failed", res);
+  }
+});
+
   };
 
   const handleBannerChange = (e: ChangeEvent<HTMLInputElement>) => {
