@@ -1,47 +1,24 @@
-import EventPageClient, { Event } from "./EventPageClient";
-import { AppwriteConfig } from "@/constants/appwrite_config";
+import EventPageClient from "./EventPageClient";
 
-// Define the props Next.js gives us for dynamic routes
 interface PageProps {
   params: {
-    event: string; // event = document/collection id
+    event: string; // ✅ This must match your folder name [event]
   };
 }
 
-// Fetch event details from Appwrite
-async function getEventData(eventId: string): Promise<Event> {
-  const cfg = new AppwriteConfig();
-
-  try {
-    const doc = await cfg.databases.getDocument(
-      process.env.NEXT_PUBLIC_EVENTDB!,          // Database ID
-      process.env.NEXT_PUBLIC_EVENTCOLLECTION!,  // Collection ID
-      eventId                                    // Document ID (from URL param)
-    );
-
-    return {
-      id: doc.$id,
-      name: (doc as any).name ?? "Untitled Event",
-      details: (doc as any).details ?? "No details provided",
-    };
-  } catch (err) {
-    console.error("Error fetching event:", err);
-
-    // fallback event if fetch fails
-    return {
-      id: eventId,
-      name: "Event not found",
-      details: "Could not fetch event details.",
-    };
-  }
-}
-
+// ⬇️ Notice: no async/await issues here
 export default async function EventPage({ params }: PageProps) {
-  const eventData = await getEventData(params.event);
+  // Fetch event data here (dummy example for now)
+  const eventWithDetails = {
+    id: params.event,
+    name: `Event: ${params.event}`,
+    details: "This is a placeholder until we fetch from Appwrite",
+  };
 
   return (
-    <div className="p-6">
-      <EventPageClient event={eventData} />
+    <div>
+      <h1>{eventWithDetails.name}</h1>
+      <EventPageClient event={eventWithDetails} />
     </div>
   );
 }
