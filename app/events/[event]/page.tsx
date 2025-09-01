@@ -1,27 +1,22 @@
-import { getEventData } from './yourDataFetchingLogic';
-import EventPageClient from './EventPageClient';
+// app/Events/[event]/page.tsx
 
-// Static Generation for Dynamic Paths
-export async function generateStaticParams() {
-  return [{ event: 'event1' }, { event: 'event2' }];
+import { getEventData } from './yourDataFetchingLogic';
+interface PageProps {
+  params: {
+    event: string;
+  };
 }
 
-export default async function EventPage({
-  params,
-}: {
-  params: { event: string };
-}) {
-  const eventData = await getEventData(params.event);
+export default async function Page({ params }: PageProps) {
+  const eventId = params.event;
 
-  const eventWithDetails = {
-    ...eventData,
-    details: eventData.details ?? '',
-  };
+  // Fetch event details using the provided event ID
+  const eventDetails = await getEventData(eventId);
 
   return (
-    <div>
-      <h1>{eventWithDetails.name}</h1>
-      <EventPageClient event={eventWithDetails} />
-    </div>
+    <main>
+      <h1>{eventDetails.name}</h1>
+      <p>{eventDetails.details}</p>
+    </main>
   );
 }
