@@ -1,13 +1,11 @@
 import EventPageClient from "./EventPageClient";
 
-// Define the shape of your event data
 type Event = {
   id: string;
   name: string;
   details: string;
 };
 
-// Replace with your actual Appwrite fetch
 async function getEventData(eventId: string): Promise<Partial<Event>> {
   return {
     name: eventId.replace(/-/g, " "),
@@ -15,7 +13,7 @@ async function getEventData(eventId: string): Promise<Partial<Event>> {
   };
 }
 
-// ✅ Page component — params typed inline, no PageProps
+// ✅ Notice: no PageProps, no async props typing nonsense
 export default async function Page({ params }: { params: { event: string } }) {
   const data = await getEventData(params.event);
 
@@ -33,7 +31,6 @@ export default async function Page({ params }: { params: { event: string } }) {
   );
 }
 
-// ✅ Optional if you want static params, otherwise delete
 export async function generateStaticParams() {
-  return [];
+  return []; // or fetch from Appwrite
 }

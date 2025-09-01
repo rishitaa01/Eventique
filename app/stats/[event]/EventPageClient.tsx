@@ -20,6 +20,7 @@ export default function EventPageClient({ event }: EventPageClientProps) {
   const [docs, setDocs] = useState<Models.Document[]>([]);
   const [eventData] = useState<Event>(event);
 
+  // ✅ API call for sending emails
   const callAPI = async (email: string, subject: string, message: string) => {
     try {
       await fetch("https://send-grid-api.vercel.app/sendmail", {
@@ -32,6 +33,7 @@ export default function EventPageClient({ event }: EventPageClientProps) {
     }
   };
 
+  // ✅ Prepare data for CSV
   const computeCsvData = () =>
     Promise.resolve(
       docs.map((doc) => ({
@@ -40,6 +42,7 @@ export default function EventPageClient({ event }: EventPageClientProps) {
       }))
     );
 
+  // ✅ Fetch documents from Appwrite
   useEffect(() => {
     if (!event?.id) return;
 
@@ -54,9 +57,11 @@ export default function EventPageClient({ event }: EventPageClientProps) {
   return (
     <div className="space-y-4">
       <Header />
+
       <h2 className="text-xl font-semibold">{eventData.name}</h2>
       <p className="text-gray-600">{eventData.details}</p>
 
+      {/* ✅ Download attendees CSV */}
       <CsvDownloader
         filename={`${eventData.name}-attendees`}
         separator=","
