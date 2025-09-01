@@ -43,7 +43,7 @@ export class AppwriteConfig {
     return this.account.createOAuth2Session("github", successUrl, failureUrl);
   }
 
-  // ✅ Sign Out
+  
   async signOut() {
     try {
       await this.account.deleteSession("current");
