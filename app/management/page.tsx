@@ -1,4 +1,5 @@
-// app/management/page.tsx
+// app/management/page.tsx'use client';
+"use client";
 
 import Document from '@/components/Document'; // Adjust path if needed
 
