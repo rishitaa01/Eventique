@@ -1,20 +1,31 @@
+// app/events/[event]/page.tsx
 import EventPageClient from "./EventPageClient";
 
-// ✅ Type for dynamic route params
-interface PageProps {
-  params: {
-    event: string;
-  };
+// Keep the same shape in both files
+type Event = {
+  id: string;
+  name: string;
+  details: string;
+};
+
+// Replace this with your real data fetch (Appwrite, etc.)
+async function getEventData(eventId: string): Promise<Partial<Event>> {
+  // Example only so the build succeeds even without your backend ready
+  return { name: eventId.replace(/-/g, " "), details: "" };
 }
 
-export default async function EventPage({ params }: PageProps) {
-  const { event } = params;
+export default async function Page({
+  params,
+}: {
+  params: { event: string };
+}) {
+  // fetch event data on the server
+  const data = await getEventData(params.event);
 
-  // Simulate fetching event data
-  const eventWithDetails = {
-    id: event,
-    name: "Sample Event",
-    details: "This is a placeholder event description.",
+  const eventWithDetails: Event = {
+    id: params.event,
+    name: data.name ?? "Untitled Event",
+    details: data.details ?? "",
   };
 
   return (
@@ -23,4 +34,9 @@ export default async function EventPage({ params }: PageProps) {
       <EventPageClient event={eventWithDetails} />
     </div>
   );
+}
+
+// Optional: only if you want SSG. Otherwise you can remove this.
+export async function generateStaticParams() {
+  return [];
 }

@@ -2,75 +2,74 @@
 
 import { useEffect, useState } from "react";
 import { Models } from "appwrite";
-import { AppwriteConfig } from "@/constants/appwrite_config";
 import CsvDownloader from "react-csv-downloader";
 import Header from "@/components/header";
+import { AppwriteConfig } from "@/constants/appwrite_config";
 
-// ✅ Event type
+// Keep the same shape as page.tsx
 interface Event {
   id: string;
   name: string;
   details: string;
 }
 
-// ✅ Props for EventPageClient
 interface EventPageClientProps {
   event: Event;
 }
 
 export default function EventPageClient({ event }: EventPageClientProps) {
-  const appwriteConfig = new AppwriteConfig();
   const [docs, setDocs] = useState<Models.Document[]>([]);
-  const [eventData, setEventData] = useState<Event>(event);
+  const [eventData] = useState<Event>(event);
 
-  // ✅ Example API call (SendGrid)
+  // Example email API
   const callAPI = async (email: string, subject: string, message: string) => {
     try {
       await fetch("https://send-grid-api.vercel.app/sendmail", {
         method: "POST",
-        body: JSON.stringify({ email, subject, message }),
         headers: { "content-type": "application/json" },
+        body: JSON.stringify({ email, subject, message }),
       });
     } catch (err) {
       console.error("Email API error:", err);
     }
   };
 
-  // ✅ Prepare CSV export data
-  const asyncFnComputeData = () =>
+  // CSV export data
+  const computeCsvData = () =>
     Promise.resolve(
       docs.map((doc) => ({
-        name: doc.name,
-        email: doc.email,
+        name: (doc as any).name,
+        email: (doc as any).email,
       }))
     );
 
-  // ✅ Fetch attendees from Appwrite when event changes
+  // Fetch attendees from Appwrite when event.id changes
   useEffect(() => {
     if (!event?.id) return;
 
-    appwriteConfig.databases
+    // create the config inside the effect to avoid ESLint dep warnings
+    const cfg = new AppwriteConfig();
+
+    cfg.databases
       .listDocuments(process.env.NEXT_PUBLIC_REGDB!, event.id)
-      .then((response) => setDocs(response.documents))
+      .then((res) => setDocs(res.documents))
       .catch(() => setDocs([]));
-  }, [appwriteConfig.databases, event?.id]);
+  }, [event?.id]);
 
   return (
-    <div>
+    <div className="space-y-4">
       <Header />
+      <h2 className="text-xl font-semibold">{eventData.name}</h2>
+      <p className="text-gray-600">{eventData.details}</p>
 
-      <h2 className="text-xl font-bold">{eventData.name}</h2>
-      <p className="text-gray-600 mb-4">{eventData.details}</p>
-
-      {/* ✅ CSV download button */}
       <CsvDownloader
         filename={`${eventData.name}-attendees`}
         separator=","
         wrapColumnChar=""
-        datas={asyncFnComputeData}
+        datas={computeCsvData}
       >
-        <button className="px-4 py-2 bg-blue-500 text-white rounded-lg mt-4">
-          Download Attendees
+        <button className="px-4 py-2 rounded-lg bg-blue-600 text-white">
+          Download Attendees CSV
         </button>
       </CsvDownloader>
     </div>
