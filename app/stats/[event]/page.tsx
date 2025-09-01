@@ -1,23 +1,19 @@
-// app/events/[event]/page.tsx
-import { Metadata } from "next";
+import { FC } from "react";
 
-type PageProps = {
+interface EventPageProps {
   params: {
     event: string;
   };
-};
+}
 
-export default function EventPage({ params }: PageProps) {
+const EventPage: FC<EventPageProps> = ({ params }) => {
+  const { event } = params;
+
   return (
     <div>
-      <h1>Event: {params.event}</h1>
+      <h1>Event: {event}</h1>
     </div>
   );
-}
+};
 
-// Optional metadata function
-export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
-  return {
-    title: `Event ${params.event}`,
-  };
-}
+export default EventPage;

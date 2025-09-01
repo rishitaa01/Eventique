@@ -10,7 +10,7 @@ import {
 } from 'appwrite';
 import { User } from './interface';
 
-class AppwriteConfig {
+export class AppwriteConfig {
   databaseId = process.env.NEXT_PUBLIC_DATABASEID as string;
   activeCollId = process.env.NEXT_PUBLIC_EVENT_COLLID as string;
   bannerBucketId = process.env.NEXT_PUBLIC_EVENTBUCKET as string;
@@ -58,4 +58,5 @@ class AppwriteConfig {
   }
 }
 
+// ✅ Export both the class and an instance
 export const appwrite = new AppwriteConfig();
