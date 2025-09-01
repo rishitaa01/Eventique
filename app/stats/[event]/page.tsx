@@ -1,21 +1,22 @@
 import { notFound } from "next/navigation";
 import type { Metadata, ResolvingMetadata } from "next";
 import EventPageClient from "./EventPageClient";
-import { getEventData } from "./yourDataFetchingLogic"; // adjust path
+import { getEventData } from "./yourDataFetchingLogic";
 
-// Define the shape of Event
+// Shape of Event
 interface Event {
   id: string;
   name: string;
   details: string;
 }
 
-// ✅ generateMetadata with Next.js PageProps typing
+// ✅ Next.js 15: params is a Promise in generateMetadata
 export async function generateMetadata(
-  { params }: { params: { event: string } },
-  parent: ResolvingMetadata
+  { params }: { params: Promise<{ event: string }> },
+  _parent: ResolvingMetadata
 ): Promise<Metadata> {
-  const eventData = await getEventData(params.event);
+  const { event } = await params;              // <-- await the params
+  const eventData = await getEventData(event);
 
   if (!eventData) {
     return {
@@ -30,11 +31,11 @@ export async function generateMetadata(
     openGraph: {
       title: eventData.name,
       description: eventData.details ?? "",
-      url: `https://yourdomain.com/events/${params.event}`,
+      url: `https://yourdomain.com/events/${event}`,
       siteName: "My App",
       images: [
         {
-          url: eventData.image ?? "/logo-png.png", // ✅ dynamic if event has image
+          url: eventData.image ?? "/logo-png.png",
           width: 1200,
           height: 630,
         },
@@ -51,15 +52,12 @@ export async function generateMetadata(
   };
 }
 
-// Optional: static generation
+// (Optional) pre-generate some routes
 export async function generateStaticParams() {
-  return [
-    { event: "event1" },
-    { event: "event2" },
-  ];
+  return [{ event: "event1" }, { event: "event2" }];
 }
 
-// Page component
+// Page component: params is still a plain object here
 export default async function EventPage({
   params,
 }: {
