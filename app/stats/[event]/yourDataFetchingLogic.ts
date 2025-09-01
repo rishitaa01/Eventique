@@ -3,17 +3,21 @@ export async function getEventData(event: string) {
   const mockEvents: Record<
     string,
     {
+      image: string;
       details: string;
       name: string;
+      
     }
   > = {
     event1: {
       name: 'Event One',
       details: '',
+      image: "logo-png.png"
     },
     event2: {
       name: 'Event Two',
       details: '',
+      image: "logo-png.png"
     },
   };
   return mockEvents[event] || { name: 'Unknown Event' };

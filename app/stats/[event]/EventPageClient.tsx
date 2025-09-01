@@ -6,7 +6,6 @@ import { AppwriteConfig } from "@/constants/appwrite_config";
 import CsvDownloader from "react-csv-downloader";
 import Header from "@/components/header";
 import { Event } from "@/types/event";
-
 interface EventPageClientProps {
   event: Event;
 }
