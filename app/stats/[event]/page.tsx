@@ -1,36 +1,32 @@
 import EventPageClient from "./EventPageClient";
+import { AppwriteConfig } from "@/constants/appwrite_config";
 
-type Event = {
-  id: string;
-  name: string;
-  details: string;
-};
-
-async function getEventData(eventId: string): Promise<Partial<Event>> {
-  return {
-    name: eventId.replace(/-/g, " "),
-    details: "Sample event details",
-  };
+interface PageProps {
+  params: { event: string };
 }
 
-// ✅ Notice: no PageProps, no async props typing nonsense
-export default async function Page({ params }: { params: { event: string } }) {
-  const data = await getEventData(params.event);
+// Next.js page
+export default async function EventPage({ params }: PageProps) {
+  const { event } = params;
 
-  const eventWithDetails: Event = {
-    id: params.event,
-    name: data.name ?? "Untitled Event",
-    details: data.details ?? "",
+  const appwrite = new AppwriteConfig();
+
+  // fetch event details
+  const eventDoc = await appwrite.databases.getDocument(
+    process.env.NEXT_PUBLIC_EVENTDB!,
+    process.env.NEXT_PUBLIC_EVENTCOLLECTION!,
+    event
+  );
+
+  const eventWithDetails = {
+    id: eventDoc.$id,
+    name: (eventDoc as any).name,
+    details: (eventDoc as any).details,
   };
 
   return (
     <div>
-      <h1>{eventWithDetails.name}</h1>
       <EventPageClient event={eventWithDetails} />
     </div>
   );
-}
-
-export async function generateStaticParams() {
-  return []; // or fetch from Appwrite
 }
