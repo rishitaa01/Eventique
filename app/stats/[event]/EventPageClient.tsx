@@ -6,7 +6,6 @@ import CsvDownloader from "react-csv-downloader";
 import Header from "@/components/header";
 import { AppwriteConfig } from "@/constants/appwrite_config";
 
-// Keep the same shape as page.tsx
 interface Event {
   id: string;
   name: string;
@@ -21,7 +20,6 @@ export default function EventPageClient({ event }: EventPageClientProps) {
   const [docs, setDocs] = useState<Models.Document[]>([]);
   const [eventData] = useState<Event>(event);
 
-  // Example email API
   const callAPI = async (email: string, subject: string, message: string) => {
     try {
       await fetch("https://send-grid-api.vercel.app/sendmail", {
@@ -34,7 +32,6 @@ export default function EventPageClient({ event }: EventPageClientProps) {
     }
   };
 
-  // CSV export data
   const computeCsvData = () =>
     Promise.resolve(
       docs.map((doc) => ({
@@ -43,11 +40,9 @@ export default function EventPageClient({ event }: EventPageClientProps) {
       }))
     );
 
-  // Fetch attendees from Appwrite when event.id changes
   useEffect(() => {
     if (!event?.id) return;
 
-    // create the config inside the effect to avoid ESLint dep warnings
     const cfg = new AppwriteConfig();
 
     cfg.databases

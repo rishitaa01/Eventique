@@ -1,25 +1,22 @@
-// app/events/[event]/page.tsx
 import EventPageClient from "./EventPageClient";
 
-// Keep the same shape in both files
+// Define the shape of your event data
 type Event = {
   id: string;
   name: string;
   details: string;
 };
 
-// Replace this with your real data fetch (Appwrite, etc.)
+// Replace with your actual Appwrite fetch
 async function getEventData(eventId: string): Promise<Partial<Event>> {
-  // Example only so the build succeeds even without your backend ready
-  return { name: eventId.replace(/-/g, " "), details: "" };
+  return {
+    name: eventId.replace(/-/g, " "),
+    details: "Sample event details",
+  };
 }
 
-export default async function Page({
-  params,
-}: {
-  params: { event: string };
-}) {
-  // fetch event data on the server
+// ✅ Page component — params typed inline, no PageProps
+export default async function Page({ params }: { params: { event: string } }) {
   const data = await getEventData(params.event);
 
   const eventWithDetails: Event = {
@@ -36,7 +33,7 @@ export default async function Page({
   );
 }
 
-// Optional: only if you want SSG. Otherwise you can remove this.
+// ✅ Optional if you want static params, otherwise delete
 export async function generateStaticParams() {
   return [];
 }
