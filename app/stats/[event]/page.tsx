@@ -3,61 +3,61 @@ import type { Metadata, ResolvingMetadata } from "next";
 import EventPageClient from "./EventPageClient";
 import { getEventData } from "./yourDataFetchingLogic";
 
-// Shape of Event
+// Event type
 interface Event {
   id: string;
   name: string;
   details: string;
+  image?: string;
 }
 
-// ✅ Next.js 15: params is a Promise in generateMetadata
+// ✅ Correct generateMetadata typing (params is NOT a Promise)
 export async function generateMetadata(
-  { params }: { params: Promise<{ event: string }> },
+  { params }: { params: { event: string } },
   _parent: ResolvingMetadata
 ): Promise<Metadata> {
-  const { event } = await params;              // <-- await the params
+  const { event } = params;
   const eventData = await getEventData(event);
 
   if (!eventData) {
     return {
-      title: "Event Not Found | My App",
+      title: "Event Not Found | Eventique",
       description: "The event you are looking for does not exist.",
     };
   }
 
   return {
-    title: `${eventData.name} | My App`,
+    title: `${eventData.name} | Eventique`,
     description: eventData.details ?? "Event details and information.",
     openGraph: {
       title: eventData.name,
       description: eventData.details ?? "",
       url: `https://yourdomain.com/events/${event}`,
-      siteName: "My App",
+      siteName: "Eventique",
       images: [
         {
-          url: eventData.image ?? "/logo-png.png",
+          url: eventData.image ?? "/default-og.png",
           width: 1200,
           height: 630,
         },
       ],
-      locale: "en_US",
       type: "website",
     },
     twitter: {
       card: "summary_large_image",
       title: eventData.name,
       description: eventData.details ?? "",
-      images: [eventData.image ?? "/logo-png.png"],
+      images: [eventData.image ?? "/default-og.png"],
     },
   };
 }
 
-// (Optional) pre-generate some routes
+// Optional: pre-generate some routes
 export async function generateStaticParams() {
   return [{ event: "event1" }, { event: "event2" }];
 }
 
-// Page component: params is still a plain object here
+// ✅ Page component (params is a plain object here too)
 export default async function EventPage({
   params,
 }: {
@@ -73,6 +73,7 @@ export default async function EventPage({
     id: params.event,
     name: eventData.name ?? "Untitled Event",
     details: eventData.details ?? "",
+    image: eventData.image,
   };
 
   return (
