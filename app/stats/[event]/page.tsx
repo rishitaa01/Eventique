@@ -1,40 +1,20 @@
-// app/events/[event]/page.tsx
-import { notFound } from "next/navigation";
 import EventPageClient from "./EventPageClient";
-import { getEventData } from "./yourDataFetchingLogic"; // adjust import if needed
 
-// Define props for this dynamic route
-type Props = {
+// ✅ Type for dynamic route params
+interface PageProps {
   params: {
     event: string;
   };
-};
-
-// Define the shape of Event
-interface Event {
-  id: string;
-  name: string;
-  details: string;
 }
 
-// Optional: if you want static generation
-export async function generateStaticParams() {
-  return [{ event: "event1" }, { event: "event2" }];
-}
+export default async function EventPage({ params }: PageProps) {
+  const { event } = params;
 
-// The page component
-export default async function EventPage({ params }: Props) {
-  // Fetch event data using event id
-  const eventData = await getEventData(params.event);
-
-  if (!eventData) {
-    notFound();
-  }
-
-  const eventWithDetails: Event = {
-    id: params.event,
-    name: eventData.name ?? "Untitled Event",
-    details: eventData.details ?? "",
+  // Simulate fetching event data
+  const eventWithDetails = {
+    id: event,
+    name: "Sample Event",
+    details: "This is a placeholder event description.",
   };
 
   return (
