@@ -1,59 +1,45 @@
 "use client";
-
-import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
-import appwriteConfig from "@/constants/appwrite_config";
+import React, { useEffect, useState } from "react";
+import appwriteConfig from "../constants/appwrite_config";
+import { Models } from "appwrite";
 
 export default function SuccessPage() {
-  const router = useRouter();
+  const [user, setUser] = useState<Models.User<Models.Preferences> | null>(null);
   const [loading, setLoading] = useState(true);
-  const [user, setUser] = useState<any>(null);
 
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const u = await appwriteConfig.getCurUser();
-
-        if (u) {
-          setUser(u);
-        } else {
-          // If no user, send back to login
-          router.push("/login");
-        }
+        const curUser = await appwriteConfig.getCurUser();
+        setUser(curUser);
       } catch (err) {
-        console.error("Error fetching user:", err);
-        router.push("/login");
+        console.error("Failed to fetch user:", err);
       } finally {
         setLoading(false);
       }
     };
 
     fetchUser();
-  }, [router]);
+  }, []);
 
   if (loading) {
-    return (
-      <div className="flex items-center justify-center h-screen">
-        <p className="text-lg">Checking your session...</p>
-      </div>
-    );
+    return <p>Loading user info...</p>;
   }
 
   return (
-    <div className="flex flex-col items-center justify-center h-screen p-6">
-      <h1 className="text-3xl font-bold">🎉 Login Successful!</h1>
-      {user && (
-        <p className="mt-4 text-lg">
-          Welcome, <span className="font-semibold">{user.name || user.email}</span>
-        </p>
+    <div style={{ padding: "2rem", textAlign: "center" }}>
+      <h1>✅ Login Successful!</h1>
+      {user ? (
+        <div>
+          <p>
+            Welcome, <strong>{user.name}</strong> 👋
+          </p>
+          <p>Email: {user.email}</p>
+          <p>User ID: {user.$id}</p>
+        </div>
+      ) : (
+        <p>No user info found. Please login again.</p>
       )}
-
-      <button
-        onClick={() => router.push("/events")}
-        className="mt-6 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
-      >
-        Go to Events
-      </button>
     </div>
   );
 }
