@@ -1,7 +1,8 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import appwriteConfig from "../constants/appwrite_config"; 
+import appwriteService from "../constants/appwrite_config";
 import { Models } from "appwrite";
+import withAuth from "@/withAuth";
 
 interface Event extends Models.Document {
   eventname: string;
@@ -10,17 +11,15 @@ interface Event extends Models.Document {
   created: string;
 }
 
-export default function EventListing() {
+function EventListing() {
   const [events, setEvents] = useState<Event[]>([]);
-  const [userId, setUserId] = useState<string | null>(null);
 
   useEffect(() => {
-    // ✅ Fetch events from Appwrite
     const fetchEvents = async () => {
       try {
-        const res = await appwriteConfig.databases.listDocuments(
-          appwriteConfig.databaseId,
-          appwriteConfig.activeCollId
+        const res = await appwriteService.databases.listDocuments(
+          appwriteService.databaseId,
+          appwriteService.activeCollId
         );
         setEvents(res.documents as Event[]);
       } catch (err) {
@@ -29,17 +28,6 @@ export default function EventListing() {
     };
 
     fetchEvents();
-
-    // ✅ Load user info
-    const stored = localStorage.getItem("userInfo");
-    if (stored) {
-      try {
-        const parsed = JSON.parse(stored);
-        setUserId(parsed.$id || null);
-      } catch (e) {
-        console.error("Failed to parse userInfo:", e);
-      }
-    }
   }, []);
 
   return (
@@ -55,3 +43,5 @@ export default function EventListing() {
     </div>
   );
 }
+
+export default withAuth(EventListing);
