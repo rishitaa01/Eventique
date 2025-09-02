@@ -10,26 +10,28 @@ export const dynamic = "force-dynamic"; // disable prerender
 export default function Body() {
   const router = useRouter();
   const [loading, setLoading] = useState(true);
+  const [user, setUser] = useState<any>(null);
 
   useEffect(() => {
-  const checkUser = async (retry = 0) => {
-    try {
-      const user = await appwrite.getCurUser();
-      console.log("🔥 User session:", user);
-      if (!user && retry < 3) {
-        setTimeout(() => checkUser(retry + 1), 500); // retry up to 3 times
-      } else if (!user) {
+    const checkUser = async () => {
+      try {
+        const account = await appwrite.getCurUser();
+        console.log("🔥 User session:", account);
+        if (account) {
+          setUser(account);
+        } else {
+          router.push("/login");
+        }
+      } catch (err) {
+        console.error("❌ Error getting user:", err);
         router.push("/login");
-      } else {
+      } finally {
         setLoading(false);
       }
-    } catch (err) {
-      console.error("❌ Error getting user:", err);
-      router.push("/login");
-    }
-  };
-  checkUser();
-}, [router]);
+    };
+
+    checkUser();
+  }, [router]);
 
   if (loading) {
     return <p className="text-center mt-20">Loading your session...</p>;
@@ -43,10 +45,7 @@ export default function Body() {
             Experience hassle free event
           </h1>
           <p className="lg:w-2/3 mx-auto leading-relaxed text-base">
-            Welcome to our innovative event management application Eventique,
-            where organizing and executing unforgettable events becomes
-            effortless. Streamline your planning process and create
-            extraordinary experiences with our intuitive platform.
+            Welcome {user?.name || "to Eventique"} 🎉
           </p>
         </div>
 
