@@ -21,7 +21,7 @@
       "@/*": ["app/*"]
     }
   },
-  "include": ["src","next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "app/components/Document.jsx", ".next/types/app/success/page.tsx", ".next/types/app/page.tsx", ".next/types/app/login/failure/page.tsx"],
+  "include": ["src","next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "app/components/Document.jsx", ".next/types/app/success/page.tsx", ".next/types/app/page.tsx", ".next/types/app/login/failure/page.tsx", ".next/types/app/landing/page.tsx", ".next/types/app/events/page.tsx", ".next/types/app/events/sucessreg/page.tsx", ".next/types/app/create/page.tsx", ".next/types/app/management/page.tsx", ".next/types/app/myevents/page.tsx", ".next/types/app/stats/[event]/page.tsx", ".next/types/app/login/page.tsx"],
   "exclude": ["node_modules"]
 
 }
