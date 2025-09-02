@@ -14,7 +14,7 @@ export default function LoginComponent() {
   useEffect(() => {
     // If already logged in, redirect immediately
     if (localStorage.getItem('userInfo') !== null) {
-      router.push('/success');   // ✅ go to success
+      router.push('/landing');   // 🔄 changed from /success to /landing
     }
   }, [router]);
 
@@ -22,7 +22,7 @@ export default function LoginComponent() {
   const handleGoogleLogin = async () => {
     try {
       await appwriteConfig.googlelog();
-      router.push('/success');   // ✅ go to success
+      router.push('/landing');   // 🔄 changed from /success to /landing
     } catch (err) {
       console.error('Google login failed:', err);
       router.push('/failure');   // optional failure redirect
@@ -33,7 +33,7 @@ export default function LoginComponent() {
   const handleGithubLogin = async () => {
     try {
       await appwriteConfig.githublog();
-      router.push('/success');   // ✅ go to success
+      router.push('/landing');   // 🔄 changed from /success to /landing
     } catch (err) {
       console.error('GitHub login failed:', err);
       router.push('/failure');   // optional failure redirect

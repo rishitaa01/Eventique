@@ -2,13 +2,14 @@
 import { GoBroadcast } from "react-icons/go";
 import "@appwrite.io/pink";
 import { useRouter } from "next/navigation";
-import { useEffect } from "react"; // ✅ correct import
+import { useEffect, useState } from "react";
 import appwrite from "../constants/appwrite_config";
 
 export const dynamic = "force-dynamic"; // disable prerender
 
 export default function Body() {
   const router = useRouter();
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const checkUser = async () => {
@@ -16,7 +17,10 @@ export default function Body() {
         const user = await appwrite.getCurUser();
         console.log("User session:", user);
         if (!user) {
-          router.push("/login"); // ✅ consistent redirect
+          // retry instead of instant redirect
+          setTimeout(checkUser, 500);
+        } else {
+          setLoading(false);
         }
       } catch (err) {
         console.error("No active session, redirecting...");
@@ -24,7 +28,11 @@ export default function Body() {
       }
     };
     checkUser();
-  }, [router]); // ✅ added router to dependencies
+  }, [router]);
+
+  if (loading) {
+    return <p className="text-center mt-20">Loading your session...</p>;
+  }
 
   return (
     <section className="text-gray-600 body-font">
@@ -95,7 +103,7 @@ export default function Body() {
                 viewBox="0 0 24 24"
               >
                 <path d="M3 18v-6a9 9 0 0118 0v6"></path>
-                <path d="M21 19a2 2 0 01-2 2h-1a2 2 0 01-2-2v-3a2 2 0 012-2h3zM3 19a2 2 0 002 2h1a2 2 0 002-2v-3a2 2 0 00-2-2H3z"></path>
+                <path d="M21 19a2 2 0 01-2 2h-1a2 2 0 01-2-2v-3a2 2 0 012-2h3zM3 19a2 2 0 01-2 2h1a2 2 0 002-2v-3a2 2 0 00-2-2H3z"></path>
               </svg>
               <h2 className="title-font font-medium text-3xl text-gray-900">
                 74
