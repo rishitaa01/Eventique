@@ -1,32 +1,30 @@
 "use client";
-import { GoBroadcast } from "react-icons/go";
-import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import appwrite from "../constants/appwrite_config";
 
 export const dynamic = "force-dynamic"; // disable prerender
 
-export default function Body() {
+export default function Landing() {
   const router = useRouter();
   const [loading, setLoading] = useState(true);
+  const [user, setUser] = useState<any>(null);
 
   useEffect(() => {
     const checkUser = async () => {
       try {
-        const user = await appwrite.getCurUser();
-        console.log("User session:", user);
-        if (!user) {
-          console.error("No active session, redirecting...");
+        const account = await appwrite.getCurUser();
+        if (!account) {
           router.push("/login");
         } else {
+          setUser(account);
           setLoading(false);
         }
       } catch (err) {
-        console.error("Error checking user session:", err);
+        console.error("No active session, redirecting...");
         router.push("/login");
       }
     };
-
     checkUser();
   }, [router]);
 
@@ -34,8 +32,8 @@ export default function Body() {
     try {
       await appwrite.account.deleteSession("current");
       router.push("/login");
-    } catch (error) {
-      console.error("Error signing out:", error);
+    } catch (err) {
+      console.error("Sign out error:", err);
     }
   };
 
@@ -44,37 +42,77 @@ export default function Body() {
   }
 
   return (
-    <section className="text-gray-600 body-font">
-      <div className="container px-5 py-24 mx-auto">
-        <div className="flex flex-col text-center w-full mb-20">
-          <h1 className="sm:text-3xl text-2xl font-medium title-font mb-4 text-gray-900">
-            Welcome to Eventique 🎉
-          </h1>
-          <p className="lg:w-2/3 mx-auto leading-relaxed text-base">
-            Manage your events seamlessly with Appwrite & Next.js
-          </p>
-        </div>
+    <div>
+      {/* NAVBAR */}
+      <nav className="bg-white shadow-md">
+        <div className="container mx-auto flex justify-between items-center py-4 px-6">
+          {/* Logo */}
+          <div className="text-2xl font-bold text-pink-600 cursor-pointer" onClick={() => router.push("/landing")}>
+            Eventique
+          </div>
 
-        {/* Create Event Button */}
-        <div className="flex justify-center">
-          <button
-            onClick={() => router.push("/events/event")}
-            className="px-6 py-3 bg-indigo-500 text-white rounded-lg shadow-md hover:bg-indigo-600 transition-colors"
-          >
-            Create Event
-          </button>
-        </div>
+          {/* Navigation links */}
+          <div className="flex space-x-6 text-gray-700 font-medium">
+            <button onClick={() => router.push("/myevents")} className="hover:text-pink-600 transition">
+              My Events
+            </button>
+            <button onClick={() => router.push("/events")} className="hover:text-pink-600 transition">
+              Find Events
+            </button>
+            <button onClick={() => router.push("/event")} className="hover:text-pink-600 transition">
+              Create Event
+            </button>
+          </div>
 
-        {/* Sign Out Button */}
-        <div className="flex justify-center mt-10">
+          {/* Sign Out button */}
           <button
             onClick={handleSignOut}
-            className="px-4 py-2 bg-red-500 text-white rounded-lg shadow-md hover:bg-red-600 transition-colors"
+            className="bg-pink-600 text-white px-4 py-2 rounded-full hover:bg-pink-700 transition"
           >
             Sign Out
           </button>
         </div>
-      </div>
-    </section>
+      </nav>
+
+      {/* Landing page content */}
+      <section className="container mx-auto px-6 py-16 text-center">
+        <h1 className="text-3xl sm:text-4xl font-bold text-gray-800 mb-4">
+          Experience hassle free event
+        </h1>
+        <p className="text-gray-600 mb-8 max-w-2xl mx-auto">
+          Welcome to our innovative event management application Eventique, where organizing
+          and executing unforgettable events becomes effortless. Streamline your planning
+          process and create extraordinary experiences with our intuitive platform.
+        </p>
+
+        {/* Example cards (downloads, users, files, places) */}
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-6 mb-10">
+          <div className="bg-white shadow rounded-lg p-4">
+            <p className="text-2xl font-bold text-pink-600">2.7K</p>
+            <p className="text-gray-600">Downloads</p>
+          </div>
+          <div className="bg-white shadow rounded-lg p-4">
+            <p className="text-2xl font-bold text-pink-600">1.3K</p>
+            <p className="text-gray-600">Users</p>
+          </div>
+          <div className="bg-white shadow rounded-lg p-4">
+            <p className="text-2xl font-bold text-pink-600">74</p>
+            <p className="text-gray-600">Files</p>
+          </div>
+          <div className="bg-white shadow rounded-lg p-4">
+            <p className="text-2xl font-bold text-pink-600">46</p>
+            <p className="text-gray-600">Places</p>
+          </div>
+        </div>
+
+        {/* Create Event button */}
+        <button
+          onClick={() => router.push("/event")}
+          className="bg-pink-600 text-white px-8 py-3 rounded-full text-lg font-semibold hover:bg-pink-700 transition"
+        >
+          + Create Event
+        </button>
+      </section>
+    </div>
   );
 }

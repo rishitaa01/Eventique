@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import appwriteService from "../constants/appwrite_config";
+import appwriteService from "../app/constants/appwrite_config";
 import { Models } from "appwrite";
 import withAuth from "@/withAuth";
 
