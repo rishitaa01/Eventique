@@ -12,23 +12,24 @@ export default function Body() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const checkUser = async () => {
-      try {
-        const user = await appwrite.getCurUser();
-        console.log("User session:", user);
-        if (!user) {
-          // retry instead of instant redirect
-          setTimeout(checkUser, 500);
-        } else {
-          setLoading(false);
-        }
-      } catch (err) {
-        console.error("No active session, redirecting...");
+  const checkUser = async (retry = 0) => {
+    try {
+      const user = await appwrite.getCurUser();
+      console.log("🔥 User session:", user);
+      if (!user && retry < 3) {
+        setTimeout(() => checkUser(retry + 1), 500); // retry up to 3 times
+      } else if (!user) {
         router.push("/login");
+      } else {
+        setLoading(false);
       }
-    };
-    checkUser();
-  }, [router]);
+    } catch (err) {
+      console.error("❌ Error getting user:", err);
+      router.push("/login");
+    }
+  };
+  checkUser();
+}, [router]);
 
   if (loading) {
     return <p className="text-center mt-20">Loading your session...</p>;
