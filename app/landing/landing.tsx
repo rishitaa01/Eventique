@@ -69,7 +69,6 @@ export default function Landing() {
             onClick={handleSignOut}
             className="bg-pink-600 text-white px-4 py-2 rounded-full hover:bg-pink-700 transition"
           >
-            Sign Out
           </button>
         </div>
       </nav>
@@ -107,7 +106,7 @@ export default function Landing() {
 
         {/* Create Event button */}
         <button
-          onClick={() => router.push("/event")}
+          onClick={() => router.push("/event/create")}
           className="bg-pink-600 text-white px-8 py-3 rounded-full text-lg font-semibold hover:bg-pink-700 transition"
         >
           + Create Event
