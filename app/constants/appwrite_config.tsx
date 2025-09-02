@@ -33,15 +33,15 @@ export class AppwriteConfig {
 
   // ✅ Google Login (redirects to /success)
   async googlelog() {
-    const successUrl = `https://task-management-main-pcgw0qc9t-rishitaa01s-projects.vercel.app/success`;
-    const failureUrl = `https://task-management-main-pcgw0qc9t-rishitaa01s-projects.vercel.app/login`;
+    const successUrl = "https://task-management-main-pi.vercel.app/success";
+    const failureUrl = "https://task-management-main-pi.vercel.app/login";
     return this.account.createOAuth2Session("google", successUrl, failureUrl);
   }
 
   // ✅ GitHub Login (redirects to /success)
   async githublog() {
-    const successUrl = `https://task-management-main-pcgw0qc9t-rishitaa01s-projects.vercel.app/success`;
-    const failureUrl = `https://task-management-main-pcgw0qc9t-rishitaa01s-projects.vercel.app/login`;
+    const successUrl = "https://task-management-main-pi.vercel.app/success";
+    const failureUrl = "https://task-management-main-pi.vercel.app/login";
     return this.account.createOAuth2Session("github", successUrl, failureUrl);
   }
 
