@@ -107,7 +107,7 @@ export default function Landing() {
 
         {/* Create Event button */}
         <button
-          onClick={() => router.push("/event/create")}
+          onClick={() => router.push("/create")}
           className="bg-pink-600 text-white px-8 py-3 rounded-full text-lg font-semibold hover:bg-pink-700 transition"
         >
           + Create Event
