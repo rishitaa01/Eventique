@@ -20,25 +20,26 @@ export default function LoginComponent() {
 
   // ✅ Handle Google login
   const handleGoogleLogin = async () => {
-    try {
-      await appwriteConfig.googlelog();
-      router.push('/landing');   // 🔄 changed from /success to /landing
-    } catch (err) {
-      console.error('Google login failed:', err);
-      router.push('/failure');   // optional failure redirect
-    }
-  };
-
+  try {
+    const user = await appwriteConfig.googlelog(); // should return user/session
+    localStorage.setItem("userInfo", JSON.stringify(user)); // ✅ store in localStorage
+    router.push("/landing");
+  } catch (err) {
+    console.error("Google login failed:", err);
+    router.push("/failure");
+  }
+};
   // ✅ Handle GitHub login
   const handleGithubLogin = async () => {
-    try {
-      await appwriteConfig.githublog();
-      router.push('/landing');   // 🔄 changed from /success to /landing
-    } catch (err) {
-      console.error('GitHub login failed:', err);
-      router.push('/failure');   // optional failure redirect
-    }
-  };
+  try {
+    const user = await appwriteConfig.githublog(); // should return user/session
+    localStorage.setItem("userInfo", JSON.stringify(user)); // ✅ store in localStorage
+    router.push("/landing");
+  } catch (err) {
+    console.error("GitHub login failed:", err);
+    router.push("/failure");
+  }
+};
 
   return (
     <div className='min-h-screen bg-gray-100 flex flex-col justify-center sm:py-12'>

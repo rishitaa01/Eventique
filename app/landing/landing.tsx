@@ -11,22 +11,20 @@ export default function Landing() {
   const [user, setUser] = useState<any>(null);
 
   useEffect(() => {
-    const checkUser = async () => {
-      try {
-        const account = await appwrite.getCurUser();
-        if (!account) {
-          router.push("/login");
-        } else {
-          setUser(account);
-          setLoading(false);
-        }
-      } catch (err) {
-        console.error("No active session, redirecting...");
-        router.push("/login");
+  const fetchUser = async () => {
+    try {
+      const user = await appwrite.getCurUser();
+      if (user) {
+        localStorage.setItem("userInfo", JSON.stringify(user));
       }
-    };
-    checkUser();
-  }, [router]);
+    } catch (err) {
+      console.error("Failed to fetch user:", err);
+    }
+  };
+
+  fetchUser();
+}, []);
+
 
   const handleSignOut = async () => {
     try {
