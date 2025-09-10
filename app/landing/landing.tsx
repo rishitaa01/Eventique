@@ -11,20 +11,23 @@ export default function Landing() {
   const [user, setUser] = useState<any>(null);
 
   useEffect(() => {
-  const fetchUser = async () => {
-    try {
-      const user = await appwrite.getCurUser();
-      if (user) {
-        localStorage.setItem("userInfo", JSON.stringify(user));
+    const checkUser = async () => {
+      try {
+        const account = await appwrite.getCurUser();
+        if (!account) {
+          router.push("/login");
+        } else {
+          setUser(account);
+        }
+      } catch (err) {
+        console.error("No active session, redirecting...");
+        router.push("/login");
+      } finally {
+        setLoading(false); // ✅ always stop loading
       }
-    } catch (err) {
-      console.error("Failed to fetch user:", err);
-    }
-  };
-
-  fetchUser();
-}, []);
-
+    };
+    checkUser();
+  }, [router]);
 
   const handleSignOut = async () => {
     try {
@@ -45,19 +48,31 @@ export default function Landing() {
       <nav className="bg-white shadow-md">
         <div className="container mx-auto flex justify-between items-center py-4 px-6">
           {/* Logo */}
-          <div className="text-2xl font-bold text-pink-600 cursor-pointer" onClick={() => router.push("/landing")}>
+          <div
+            className="text-2xl font-bold text-pink-600 cursor-pointer"
+            onClick={() => router.push("/landing")}
+          >
             Eventique
           </div>
 
           {/* Navigation links */}
           <div className="flex space-x-6 text-gray-700 font-medium">
-            <button onClick={() => router.push("/myevents")} className="hover:text-pink-600 transition">
+            <button
+              onClick={() => router.push("/myevents")}
+              className="hover:text-pink-600 transition"
+            >
               My Events
             </button>
-            <button onClick={() => router.push("/events")} className="hover:text-pink-600 transition">
+            <button
+              onClick={() => router.push("/events")}
+              className="hover:text-pink-600 transition"
+            >
               Find Events
             </button>
-            <button onClick={() => router.push("/event")} className="hover:text-pink-600 transition">
+            <button
+              onClick={() => router.push("/create")}
+              className="hover:text-pink-600 transition"
+            >
               Create Event
             </button>
           </div>
@@ -78,12 +93,13 @@ export default function Landing() {
           Experience hassle free event
         </h1>
         <p className="text-gray-600 mb-8 max-w-2xl mx-auto">
-          Welcome to our innovative event management application Eventique, where organizing
-          and executing unforgettable events becomes effortless. Streamline your planning
-          process and create extraordinary experiences with our intuitive platform.
+          Welcome to our innovative event management application Eventique, where
+          organizing and executing unforgettable events becomes effortless.
+          Streamline your planning process and create extraordinary experiences
+          with our intuitive platform.
         </p>
 
-        {/* Example cards (downloads, users, files, places) */}
+        {/* Example cards */}
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-6 mb-10">
           <div className="bg-white shadow rounded-lg p-4">
             <p className="text-2xl font-bold text-pink-600">2.7K</p>
