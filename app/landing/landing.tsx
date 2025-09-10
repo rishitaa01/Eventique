@@ -30,13 +30,16 @@ export default function Landing() {
   }, [router]);
 
   const handleSignOut = async () => {
-    try {
-      await appwrite.account.deleteSession("current");
+  try {
+    const res = await appwrite.signOut(); // ✅ use wrapper
+    if (res) {
       router.push("/login");
-    } catch (err) {
-      console.error("Sign out error:", err);
     }
-  };
+  } catch (err) {
+    console.error("Sign out error:", err);
+  }
+};
+
 
   if (loading) {
     return <p className="text-center mt-20">Loading your session...</p>;
