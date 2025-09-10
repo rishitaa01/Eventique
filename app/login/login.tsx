@@ -5,41 +5,32 @@ import { FcGoogle } from 'react-icons/fc';
 import { AiFillGithub } from 'react-icons/ai';
 import { AppwriteConfig } from '@/constants/appwrite_config';
 import { useRouter } from 'next/navigation';
-import { useEffect } from 'react';
 
 export default function LoginComponent() {
   const router = useRouter();
   const appwriteConfig = new AppwriteConfig();
 
-  useEffect(() => {
-    // If already logged in, redirect immediately
-    if (localStorage.getItem('userInfo') !== null) {
-      router.push('/landing');   // 🔄 changed from /success to /landing
-    }
-  }, [router]);
-
   // ✅ Handle Google login
   const handleGoogleLogin = async () => {
-  try {
-    const user = await appwriteConfig.googlelog(); // should return user/session
-    localStorage.setItem("userInfo", JSON.stringify(user)); // ✅ store in localStorage
-    router.push("/landing");
-  } catch (err) {
-    console.error("Google login failed:", err);
-    router.push("/failure");
-  }
-};
+    try {
+      await appwriteConfig.googlelog(); 
+      // Appwrite will redirect automatically to /landing
+    } catch (err) {
+      console.error("Google login failed:", err);
+      router.push("/failure");
+    }
+  };
+
   // ✅ Handle GitHub login
   const handleGithubLogin = async () => {
-  try {
-    const user = await appwriteConfig.githublog(); // should return user/session
-    localStorage.setItem("userInfo", JSON.stringify(user)); // ✅ store in localStorage
-    router.push("/landing");
-  } catch (err) {
-    console.error("GitHub login failed:", err);
-    router.push("/failure");
-  }
-};
+    try {
+      await appwriteConfig.githublog();
+      // Appwrite will redirect automatically to /landing
+    } catch (err) {
+      console.error("GitHub login failed:", err);
+      router.push("/failure");
+    }
+  };
 
   return (
     <div className='min-h-screen bg-gray-100 flex flex-col justify-center sm:py-12'>

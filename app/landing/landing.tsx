@@ -30,16 +30,15 @@ export default function Landing() {
   }, [router]);
 
   const handleSignOut = async () => {
-  try {
-    const res = await appwrite.signOut(); // ✅ use wrapper
-    if (res) {
-      router.push("/login");
+    try {
+      const res = await appwrite.signOut(); // ✅ use wrapper
+      if (res) {
+        router.push("/login");
+      }
+    } catch (err) {
+      console.error("Sign out error:", err);
     }
-  } catch (err) {
-    console.error("Sign out error:", err);
-  }
-};
-
+  };
 
   if (loading) {
     return <p className="text-center mt-20">Loading your session...</p>;
@@ -73,7 +72,7 @@ export default function Landing() {
               Find Events
             </button>
             <button
-              onClick={() => router.push("/create")}
+              onClick={() => router.push("/create")} // ✅ consistent
               className="hover:text-pink-600 transition"
             >
               Create Event

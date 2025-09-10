@@ -22,14 +22,21 @@ export class AppwriteConfig {
   }
 
   // ✅ Get Current User
-  async getCurUser() {
-    try {
-      return await this.account.get();
-    } catch (error) {
-      console.error("Error getting current user:", error);
+  // ✅ Get Current User (safe)
+async getCurUser() {
+  try {
+    const user = await this.account.get();
+    if (!user) {
+      console.warn("No user object returned from Appwrite");
       return null;
     }
+    return user;
+  } catch (error: any) {
+    console.error("Error getting current user:", error?.message || error);
+    return null;
   }
+}
+
 
   // ✅ Google Login (redirects to /success)
   async googlelog() {
