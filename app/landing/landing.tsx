@@ -11,23 +11,21 @@ export default function Landing() {
   const [user, setUser] = useState<any>(null);
 
   useEffect(() => {
-    const checkUser = async () => {
-      try {
-        const account = await appwrite.getCurUser();
-        if (!account) {
-          router.push("/login");
-        } else {
-          setUser(account);
-        }
-      } catch (err) {
-        console.error("No active session, redirecting...");
-        router.push("/login");
-      } finally {
-        setLoading(false); // ✅ always stop loading
-      }
-    };
-    checkUser();
-  }, [router]);
+  const checkUser = async () => {
+    const account = await appwrite.getCurUser();
+
+    if (!account) {
+      console.warn("No active session, redirecting...");
+      router.push("/login");
+    } else {
+      setUser(account);
+    }
+    setLoading(false);
+  };
+
+  checkUser();
+}, [router]);
+
 
   const handleSignOut = async () => {
     try {

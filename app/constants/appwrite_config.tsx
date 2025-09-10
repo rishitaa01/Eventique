@@ -11,10 +11,10 @@ export class AppwriteConfig {
   activeCollId = "68b48f1e000a58d3f9f0";    // 🔹 replace with your Collection ID
   bannerBucketId = "68b48a12000497b1fb8";   // 🔹 replace with your Storage bucket ID
 
-  constructor() {
-    this.client = new Client()
-      .setEndpoint("https://nyc.cloud.appwrite.io/v1") // 🔹 or your endpoint
-      .setProject("68b097340015d3840771");             // 🔹 your Project ID
+  constructor() {;     // 🔹 your Project ID
+  this.client = new Client()
+    .setEndpoint(process.env.NEXT_PUBLIC_ENDPOINT!)
+    .setProject(process.env.NEXT_PUBLIC_PROJECTID!);
 
     this.account = new Account(this.client);
     this.databases = new Databases(this.client);
@@ -23,6 +23,7 @@ export class AppwriteConfig {
 
   // ✅ Get Current User
   // ✅ Get Current User (safe)
+// ✅ Get Current User (safe)
 async getCurUser() {
   try {
     const user = await this.account.get();
@@ -36,6 +37,7 @@ async getCurUser() {
     return null;
   }
 }
+
 
 
   // ✅ Google Login (redirects to /success)

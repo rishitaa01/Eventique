@@ -71,18 +71,12 @@ export default function Home() {
               next event.
             </p>
             <div className='mt-10 flex items-center justify-center gap-x-6'>
-              <button
+             <button
                 className='rounded-md bg-[#f02e65] px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-[#990e3c] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600'
-                onClick={() => {
-                  if (localStorage.getItem('userInfo') != null) {
-                    router.push('/landing');
-                  } else {
-                    router.push('/login');
-                  }
-                }}
+                onClick={() => router.push('/login')}
               >
-                Get started
-              </button>
+              Get started
+            </button>
               {/* 🔥 Removed "Learn more →" link */}
             </div>
           </div>
